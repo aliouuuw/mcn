@@ -20,6 +20,15 @@ The "Portal Experience" is a scroll-based website that takes users on a virtual 
 *   **Multilingual Support**: The website will support French, English, and Wolof.
 *   **QR Code Integration**: On-site visitors can scan QR codes to access artifact details.
 
+## Technical Stack
+
+*   **Animation Engine**: GSAP with ScrollTrigger for smooth, performant animations and scroll-based interactions.
+*   **Smooth Scrolling**: Lenis for buttery-smooth scroll experience across all devices.
+*   **3D Rendering**: React Three Fiber (R3F) for immersive 3D scenes and future GLTF model integration.
+*   **3D Helpers**: @react-three/drei for OrbitControls, Text, and other 3D utilities.
+*   **Color Palette**: Black, white, beige, brown, and gray for authentic museum aesthetic.
+*   **Architecture**: Single persistent Canvas orchestrating all scenes for optimal performance.
+
 ## Scene Details
 
 ### 1. Threshold (0–15%)
