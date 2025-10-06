@@ -1005,15 +1005,3 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-/* Collections Mobile Optimizations */
-@media (max-width: 768px) {
-  .collections-overlay-smooth::before,
-  .collections-overlay-smooth::after {
-    display: none;
-  }
-  
-  .collections-root {
-    touch-action: pan-y;
-  }
-}
-
