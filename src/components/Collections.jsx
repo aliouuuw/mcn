@@ -1,3 +1,6 @@
+import React, { useRef, useEffect, useState } from 'react'
+import Lenis from 'lenis'
+
 const artifacts = [
   {
     type: "image",
@@ -5,15 +8,6 @@ const artifacts = [
     titles: {
       fr: "Masque Traditionnel",
       en: "Traditional Mask",
-    },
-    descriptions: {
-      fr: "Masque Traditionnel",
-      en: "Traditional Mask",
-    },
-    audios: {
-      fr: null,
-      en: null,
-      wo: null,
     },
   },
   {
@@ -23,15 +17,6 @@ const artifacts = [
       fr: "Textile Kente",
       en: "Kente Textile",
     },
-    descriptions: {
-      fr: "Textile Kente",
-      en: "Kente Textile",
-    },
-    audios: {
-      fr: null,
-      en: null,
-      wo: null,
-    },
   },
   {
     type: "image",
@@ -39,29 +24,15 @@ const artifacts = [
     titles: {
       fr: "Sculpture Ancienne",
       en: "Ancient Sculpture",
-      wo: "Sculpture Ancienne",
-    },
-    descriptions: {
-      fr: "Sculpture Ancienne",
-      en: "Ancient Sculpture",
-      wo: "Sculpture Ancienne",
-    },
-    audios: {
-      fr: null,
-      en: null,
-      wo: null,
     },
   },
   {
-    id: 5,
     type: "image",
     src: "/artifacts/artifact-4.jpg",
-    title: "Masque Cerémonial",
-    period: "XVIIe siècle",
-    culture: "Culture Senufo",
-    row: 1,
-    col: 1.5,
-    span: 1.5, // Spans 1.5 columns
+    titles: {
+      fr: "Masque Cerémonial",
+      en: "Ceremonial Mask",
+    },
   },
   {
     type: "video",
@@ -71,40 +42,64 @@ const artifacts = [
       fr: "Rituel Funéraire",
       en: "Funeral Ritual",
     },
-    descriptions: {
-      fr: "Rituel Funéraire",
-      en: "Funeral Ritual",
-    },
-    audios: {
-      fr: null,
-      en: null,
-      wo: null,
-    },
   },
-];
+]
 
-
-// Irregular grid item component with random heights
-function GridItem({ artifact, span = 1, height = 'h-64' }) {
+// Single artifact component
+function ArtifactItem({ artifact, index, scrollY, cycleHeight }) {
+  const ref = useRef()
+  
+  // Calculate position within the infinite loop
+  const itemHeight = 600
+  const basePosition = (index % artifacts.length) * itemHeight
+  
+  // Calculate parallax offset
+  const parallaxOffset = scrollY * 0.1 * (index % 2 === 0 ? 1 : -1)
+  
+  // Calculate opacity based on scroll position with circular logic
+  const viewportHeight = window.innerHeight
+  const scrollCenter = scrollY + viewportHeight / 2
+  
+  // Distance from scroll center, accounting for circular nature
+  let distanceFromCenter = Math.abs(scrollCenter - (basePosition + itemHeight / 2))
+  
+  // Handle circular distance calculation
+  const halfCycle = cycleHeight / 2
+  if (distanceFromCenter > halfCycle) {
+    distanceFromCenter = cycleHeight - distanceFromCenter
+  }
+  
+  const maxDistance = viewportHeight
+  const opacity = Math.max(0.2, 1 - (distanceFromCenter / maxDistance))
+  
+  // Random horizontal offset for staggered layout
+  const xOffset = index % 2 === 0 ? '10%' : '-10%'
+  
   return (
     <div
-      className="relative overflow-hidden rounded-lg"
+      ref={ref}
+      className="relative flex justify-center items-center mb-32"
       style={{
-        gridColumn: `span ${span}`,
+        transform: `translateX(${xOffset}) translateY(${parallaxOffset}px)`,
+        opacity: opacity,
+        transition: 'opacity 0.3s ease-out'
       }}
     >
-      <div className={`${height} relative`}>
+      <div className="relative group">
         <img
           src={artifact.type === 'video' ? artifact.thumbnail : artifact.src}
-          alt={artifact.titles?.en || artifact.title || 'Artifact'}
-          className="w-full h-full object-contain bg-transparent"
+          alt={artifact.titles?.en || 'Artifact'}
+          className="max-w-md max-h-96 object-contain shadow-lg transition-transform duration-700 ease-out group-hover:scale-105"
+          style={{
+            filter: `brightness(${0.9 + opacity * 0.1})`,
+          }}
         />
         
         {/* Video indicator */}
         {artifact.type === 'video' && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 bg-black/30 rounded-full flex items-center justify-center backdrop-blur-sm">
+              <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
               </svg>
             </div>
@@ -115,76 +110,93 @@ function GridItem({ artifact, span = 1, height = 'h-64' }) {
   )
 }
 
-// Main Collections component - Highly irregular grid with chaotic layouts
+// Main Collections component
 const Collections = () => {
-  // Define extremely irregular grid layout patterns with random spans and heights
-  const gridLayouts = [
-    // Row 1: Asymmetric start with large items
-    [1.5, null, 3, null, 2.5],
-    // Row 2: Single massive item offset
-    [null, 4, null],
-    // Row 3: Scattered medium items with gaps
-    [2, null, null, 1.5, null, 2.5],
-    // Row 4: Chaotic mix of larger sizes
-    [2.5, 1.5, null, 3, null],
-    // Row 5: Off-center large item
-    [null, 3.5, null, 2.5],
-    // Row 6: Dense irregular pattern
-    [1.5, 2, null, 2.5, null, 2]
-  ]
-
-  // Create highly irregular grid positions with random heights
-  const gridPositions = []
-  let artifactIndex = 0
+  const [scrollY, setScrollY] = useState(0)
+  const containerRef = useRef()
   
-  // Large height classes from regular to extra-large
-  const randomHeights = [
-    'h-64', 'h-72', 'h-80', 'h-96', 'h-[28rem]', 'h-[32rem]', 'h-[36rem]', 'h-[40rem]'
+  // Single cycle of artifacts for circular loop
+  const singleCycleHeight = artifacts.length * 600
+  
+  // Create enough copies to ensure seamless looping
+  const infiniteArtifacts = [
+    ...artifacts,
+    ...artifacts,
+    ...artifacts
   ]
-
-  gridLayouts.forEach((row) => {
-    row.forEach((span) => {
-      if (span === null) {
-        // Empty cell
-        gridPositions.push(null)
-      } else {
-        // Filled cell with artifact and random height
-        gridPositions.push({
-          artifact: artifacts[artifactIndex % artifacts.length],
-          span: span,
-          height: randomHeights[Math.floor(Math.random() * randomHeights.length)]
-        })
-        artifactIndex++
+  
+  useEffect(() => {
+    let animationId
+    let currentScroll = 0
+    
+    // Custom smooth scroll handler for true circular looping
+    const handleWheel = (e) => {
+      e.preventDefault()
+      
+      // Adjust scroll speed
+      const delta = e.deltaY * 2
+      currentScroll += delta
+      
+      // Keep scroll within one cycle for seamless looping
+      currentScroll = ((currentScroll % singleCycleHeight) + singleCycleHeight) % singleCycleHeight
+      
+      setScrollY(currentScroll)
+    }
+    
+    // Smooth scroll animation
+    const smoothScroll = () => {
+      animationId = requestAnimationFrame(smoothScroll)
+    }
+    
+    // Add event listeners
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    smoothScroll()
+    
+    return () => {
+      window.removeEventListener('wheel', handleWheel)
+      if (animationId) {
+        cancelAnimationFrame(animationId)
       }
-    })
-  })
-
+    }
+  }, [singleCycleHeight])
+  
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-8 gap-2 md:gap-4 lg:gap-6">
-          {gridPositions.map((position, index) => {
-            if (position === null) {
-              // Render empty cell
-              return (
-                <div
-                  key={index}
-                  className="h-32"
-                  style={{ gridColumn: 'span 1' }}
-                />
-              )
-            } else {
-              // Render GridItem
-              return (
-                <GridItem
-                  key={index}
-                  artifact={position.artifact}
-                  span={position.span}
-                  height={position.height}
-                />
-              )
-            }
-          })}
+    <div className="min-h-screen bg-white">
+      {/* Content container */}
+      <div 
+        ref={containerRef}
+        className="relative"
+        style={{ height: `${infiniteArtifacts.length * 600}px` }}
+      >
+        {/* Artifacts */}
+        <div className="relative z-10 pt-20 pb-20">
+          {infiniteArtifacts.map((artifact, index) => (
+            <ArtifactItem
+              key={`${artifact.src}-${index}`}
+              artifact={artifact}
+              index={index}
+              scrollY={scrollY}
+              cycleHeight={singleCycleHeight}
+            />
+          ))}
+        </div>
+      </div>
+      
+      {/* Subtle gradient overlays */}
+      <div className="fixed inset-0 pointer-events-none z-20">
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white via-white/80 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent" />
+      </div>
+      
+      {/* Circular scroll indicator */}
+      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-30">
+        <div className="w-1 h-16 bg-gray-200 rounded-full overflow-hidden">
+          <div 
+            className="w-full bg-gray-400 rounded-full transition-all duration-300 ease-out"
+            style={{ 
+              height: `${(scrollY / singleCycleHeight) * 100}%` 
+            }}
+          />
         </div>
       </div>
     </div>
