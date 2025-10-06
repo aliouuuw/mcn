@@ -256,7 +256,7 @@ function App() {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.7 }}
             >
-              {[{ lang: "FR", active: true }, { lang: "WO", active: false }, { lang: "EN", active: false }].map((item, index) => (
+              {[{ lang: "FR", active: true }, { lang: "EN", active: false }].map((item, index) => (
                 <motion.button 
                   key={item.lang}
                   type="button" 
