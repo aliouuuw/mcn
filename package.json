@@ -4,15 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "tsr generate && vite",
+    "build": "tsr generate && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "routes:generate": "tsr generate"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.3.0",
     "@tailwindcss/postcss": "^4.1.14",
+    "@tanstack/react-router": "^1.132.41",
     "framer-motion": "^12.23.22",
     "gsap": "^3.13.0",
     "postcss": "^8.5.6",
@@ -23,6 +25,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@tanstack/router-cli": "^1.132.41",
+    "@tanstack/router-devtools": "^1.132.41",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.4",
