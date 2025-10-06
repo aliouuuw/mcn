@@ -916,3 +916,104 @@ body {
   }
 }
 
+/* Collections Page Styles */
+.collections-root {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: #f4f4f0;
+  isolation: isolate;
+}
+
+.collections-overlay-smooth {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(circle at 50% 50%, 
+      rgba(251, 249, 247, 0.7) 0%, 
+      rgba(248, 240, 230, 0.85) 54%, 
+      rgba(245, 235, 220, 0.92) 78%, 
+      rgba(243, 230, 210, 0.98) 100%);
+  backdrop-filter: blur(26px) saturate(120%);
+  opacity: 0.9;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.collections-overlay-smooth::before {
+  content: "";
+  position: absolute;
+  inset: -18vh -20vw;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, 
+      rgba(245, 235, 220, 0) 0%, 
+      rgba(240, 225, 200, 0.24) 60%, 
+      rgba(235, 215, 185, 0.68) 100%);
+  filter: blur(22px);
+  opacity: 0.9;
+  transform: scale(0.94) translate3d(-2%, -2%, 0);
+  animation: overlay-drift 34s ease-in-out infinite;
+}
+
+.collections-overlay-smooth::after {
+  content: "";
+  position: absolute;
+  inset: 6%;
+  border-radius: 36%;
+  border: 1px solid rgba(240, 225, 200, 0.32);
+  box-shadow:
+    0 0 60px rgba(235, 215, 185, 0.4),
+    inset 0 0 30px rgba(230, 210, 175, 0.22);
+  filter: blur(16px);
+  opacity: 0.42;
+  transform: scale(0.99) rotate(-0.4deg);
+  animation: overlay-glint 28s ease-in-out infinite;
+}
+
+@keyframes overlay-drift {
+  0%, 100% {
+    transform: scale(0.94) translate3d(-2%, -2%, 0);
+  }
+  50% {
+    transform: scale(0.96) translate3d(2%, 2%, 0);
+  }
+}
+
+@keyframes overlay-glint {
+  0%, 100% {
+    transform: scale(0.99) rotate(-0.4deg);
+    opacity: 0.42;
+  }
+  50% {
+    transform: scale(1.01) rotate(0.4deg);
+    opacity: 0.52;
+  }
+}
+
+/* Glass Panel Effect */
+.glass-panel {
+  background: rgba(251, 249, 247, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 69, 19, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(139, 69, 19, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Collections Mobile Optimizations */
+@media (max-width: 768px) {
+  .collections-overlay-smooth::before,
+  .collections-overlay-smooth::after {
+    display: none;
+  }
+  
+  .collections-root {
+    touch-action: pan-y;
+  }
+}
+
