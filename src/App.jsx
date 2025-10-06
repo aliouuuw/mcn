@@ -158,7 +158,7 @@ function App() {
   }, [isHoveringHero])
   
   // Pre-calculate character positions for cleaner code
-  const titleText = "Entrez dans l'âme des Civilisations Noires"
+  const titleText = "Explorez l'héritage des Civilisations Noires"
   const words = titleText.split(" ")
   let globalCharIndex = 0
   return (
@@ -222,7 +222,7 @@ function App() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6, duration: 0.4 }}
               >
-                Récits africains · Dakar
+                Civilisations noires · Patrimoine mondial
               </motion.span>
             </motion.div>
             
@@ -232,7 +232,7 @@ function App() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
-              {["Expérience", "Collections", "Agenda", "Impact"].map((item, index) => (
+              {["Collections", "Agenda", "Visite"].map((item, index) => (
                 <motion.a 
                   key={item}
                   href={`#${item.toLowerCase()}`} 
@@ -293,7 +293,7 @@ function App() {
               className="hero-kicker"
               variants={kickerVariants}
             >
-              Racines · Rythmes · Renaissance
+              Mémoire · Culture · Identité
             </motion.p>
             
             <motion.h1 
@@ -369,7 +369,7 @@ function App() {
               className="hero-subtitle"
               variants={textVariants}
             >
-              Découvrez des artefacts vivants et des récits qui traversent les siècles.
+              Explorez <strong>18 000</strong> œuvres qui retracent l'évolution des civilisations noires à travers le temps et l'espace.
             </motion.p>
             
             <motion.div 
@@ -383,7 +383,7 @@ function App() {
                 whileHover="hover"
                 whileTap="tap"
               >
-                Entrer dans la galerie
+                Découvrir les collections
               </motion.a>
               
               <motion.div 
@@ -391,10 +391,10 @@ function App() {
                 variants={containerVariants}
               >
                 <motion.span variants={contextVariants}>
-                  Expérience immersive
+                  18 000 œuvres
                 </motion.span>
                 <motion.span variants={contextVariants}>
-                  Patrimoine vivant
+                  Cultures du monde noir
                 </motion.span>
               </motion.div>
             </motion.div>

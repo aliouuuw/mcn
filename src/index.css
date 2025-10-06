@@ -376,10 +376,9 @@ body {
 
 /* Navigation Styles */
 .nav-shell {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 2rem;
   padding: 1rem 2rem;
   border-radius: 999px;
@@ -428,6 +427,7 @@ body {
 .nav-links {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 2rem;
 }
 
@@ -468,6 +468,7 @@ body {
 .nav-actions {
   display: flex;
   align-items: center;
+  justify-self: end;
   gap: 0.5rem;
 }
 
