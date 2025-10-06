@@ -46,31 +46,18 @@ const artifacts = [
 ]
 
 // Single artifact component
-function ArtifactItem({ artifact, index, scrollY, cycleHeight }) {
+function ArtifactItem({ artifact, index, scrollY }) {
   const ref = useRef()
-  
-  // Calculate position within the infinite loop
-  const itemHeight = 600
-  const basePosition = (index % artifacts.length) * itemHeight
   
   // Calculate parallax offset
   const parallaxOffset = scrollY * 0.1 * (index % 2 === 0 ? 1 : -1)
   
-  // Calculate opacity based on scroll position with circular logic
+  // Calculate opacity based on scroll position
+  const itemTop = index * 600 // Approximate item height
   const viewportHeight = window.innerHeight
-  const scrollCenter = scrollY + viewportHeight / 2
-  
-  // Distance from scroll center, accounting for circular nature
-  let distanceFromCenter = Math.abs(scrollCenter - (basePosition + itemHeight / 2))
-  
-  // Handle circular distance calculation
-  const halfCycle = cycleHeight / 2
-  if (distanceFromCenter > halfCycle) {
-    distanceFromCenter = cycleHeight - distanceFromCenter
-  }
-  
+  const distanceFromCenter = Math.abs((scrollY + viewportHeight / 2) - (itemTop + 300))
   const maxDistance = viewportHeight
-  const opacity = Math.max(0.2, 1 - (distanceFromCenter / maxDistance))
+  const opacity = Math.max(0.3, 1 - (distanceFromCenter / maxDistance))
   
   // Random horizontal offset for staggered layout
   const xOffset = index % 2 === 0 ? '10%' : '-10%'
@@ -114,51 +101,56 @@ function ArtifactItem({ artifact, index, scrollY, cycleHeight }) {
 const Collections = () => {
   const [scrollY, setScrollY] = useState(0)
   const containerRef = useRef()
+  const lenisRef = useRef()
   
-  // Single cycle of artifacts for circular loop
-  const singleCycleHeight = artifacts.length * 600
-  
-  // Create enough copies to ensure seamless looping
+  // Create multiple copies for infinite scroll effect
   const infiniteArtifacts = [
+    ...artifacts,
+    ...artifacts,
+    ...artifacts,
     ...artifacts,
     ...artifacts,
     ...artifacts
   ]
   
   useEffect(() => {
-    let animationId
-    let currentScroll = 0
+    // Initialize Lenis for smooth scrolling
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+      infinite: false,
+    })
     
-    // Custom smooth scroll handler for true circular looping
-    const handleWheel = (e) => {
-      e.preventDefault()
+    lenisRef.current = lenis
+    
+    // Update scroll position
+    lenis.on('scroll', ({ scroll }) => {
+      setScrollY(scroll)
       
-      // Adjust scroll speed
-      const delta = e.deltaY * 2
-      currentScroll += delta
-      
-      // Keep scroll within one cycle for seamless looping
-      currentScroll = ((currentScroll % singleCycleHeight) + singleCycleHeight) % singleCycleHeight
-      
-      setScrollY(currentScroll)
+      // Infinite scroll logic - reset when reaching bottom
+      const maxScroll = containerRef.current?.scrollHeight - window.innerHeight
+      if (scroll > maxScroll * 0.8) {
+        // Smoothly reset to beginning
+        lenis.scrollTo(0, { immediate: false, duration: 2 })
+      }
+    })
+    
+    function raf(time) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
     }
     
-    // Smooth scroll animation
-    const smoothScroll = () => {
-      animationId = requestAnimationFrame(smoothScroll)
-    }
-    
-    // Add event listeners
-    window.addEventListener('wheel', handleWheel, { passive: false })
-    smoothScroll()
+    requestAnimationFrame(raf)
     
     return () => {
-      window.removeEventListener('wheel', handleWheel)
-      if (animationId) {
-        cancelAnimationFrame(animationId)
-      }
+      lenis.destroy()
     }
-  }, [singleCycleHeight])
+  }, [])
   
   return (
     <div className="min-h-screen bg-white">
@@ -176,7 +168,6 @@ const Collections = () => {
               artifact={artifact}
               index={index}
               scrollY={scrollY}
-              cycleHeight={singleCycleHeight}
             />
           ))}
         </div>
@@ -188,13 +179,13 @@ const Collections = () => {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent" />
       </div>
       
-      {/* Circular scroll indicator */}
+      {/* Scroll indicator */}
       <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-30">
         <div className="w-1 h-16 bg-gray-200 rounded-full overflow-hidden">
           <div 
             className="w-full bg-gray-400 rounded-full transition-all duration-300 ease-out"
             style={{ 
-              height: `${(scrollY / singleCycleHeight) * 100}%` 
+              height: `${Math.min(100, (scrollY / (containerRef.current?.scrollHeight - window.innerHeight || 1)) * 100)}%` 
             }}
           />
         </div>
