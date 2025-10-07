@@ -1,0 +1,358 @@
+[
+  {
+    "id": "armure-du-chasseur-dogon-mali",
+    "type": "image",
+    "src": "/artefacts/armure_dongo_mali.jpg",
+    "titles": {
+      "fr": "Armure du chasseur Dogon (Mali)",
+      "en": "Armure du chasseur Dogon (Mali)",
+      "wo": "Armure du chasseur Dogon (Mali)"
+    },
+    "description": {
+      "fr": "Cette tenue servait d'armure au chasseur Dogon dans la civilisation mandingue. Elle est composée de cuir et de multiples amulettes cousues sur le tissu pour former une protection contre les mauvais esprits. Les Dogon, peuple du Mali, considèrent la chasse comme une activité sacrée et les chasseurs se parent d'objets dotés d'un pouvoir spirituel. L'armure exposée au MCN illustre cette symbiose entre art et croyances.",
+      "en": "This outfit served as an armor for a Dogon hunter in the Manding civilization. It consists of leather covered with numerous amulets sewn onto the fabric to protect the wearer from evil spirits.The Dogon people of Mali regard hunting as a sacred activity and hunters wear objects endowed with spiritual power. The armor on display at the MCN highlights this blend of artistry and belief.",
+      "wo": ""
+    },
+    "details": {
+      "origin": {
+        "fr": "Mali",
+        "en": "Mali",
+        "wo": "Mali"
+      },
+      "period": {
+        "fr": "Collection MCN",
+        "en": "MCN Collection",
+        "wo": "Koleksyon MCN"
+      },
+      "material": {
+        "fr": "Matériau traditionnel",
+        "en": "Traditional material",
+        "wo": "Materyèl tradisyonèl"
+      }
+    },
+    "cultural_context": {
+      "fr": "Pièce authentique du Musée des Civilisations Noires de Dakar, représentant le patrimoine culturel africain.",
+      "en": "Authentic piece from the Museum of Black Civilizations in Dakar, representing African cultural heritage.",
+      "wo": "Piès otantik ki bokk ci Musée des Civilisations Noires ci Dakar, di wone eritaaj kultural Afrig."
+    }
+  },
+  {
+    "id": "babouches-de-serigne-babacar-sy-senegal",
+    "type": "image",
+    "src": "/artefacts/Babouches_Serigne_Babacar_Sy_senegal.jpeg",
+    "titles": {
+      "fr": "Babouches de Serigne Babacar Sy (Sénégal)",
+      "en": "Babouches de Serigne Babacar Sy (Sénégal)",
+      "wo": "Babouches de Serigne Babacar Sy (Sénégal)"
+    },
+    "description": {
+      "fr": "Ces babouches appartenaient à Serigne Babacar Sy, guide religieux de la confrérie Tijaniyya au Sénégal. Leur description indique simplement qu'il s'agit des « babouches de Serigne Babacar Sy exposées au Musée des Civilisations Noires de Dakar ».Serigne Babacar Sy (1885‑1957) fut un leader spirituel très influent, connu pour son action dans l'éducation et le soufisme. Les babouches témoignent du respect voué à sa mémoire.",
+      "en": "These slippers belonged to Serigne Babacar Sy, a religious leader of the Tijaniyya brotherhood in Senegal. The description simply states that they are \"slippers of Serigne Babacar Sy displayed at the Museum of Black Civilizations in Dakar\".Serigne Babacar Sy (1885–1957) was an influential spiritual leader renowned for his work in education and Sufism. The slippers reflect the respect accorded to his legacy.",
+      "wo": ""
+    },
+    "details": {
+      "origin": {
+        "fr": "Sénégal",
+        "en": "Senegal",
+        "wo": "Senegal"
+      },
+      "period": {
+        "fr": "Collection MCN",
+        "en": "MCN Collection",
+        "wo": "Koleksyon MCN"
+      },
+      "material": {
+        "fr": "Matériau traditionnel",
+        "en": "Traditional material",
+        "wo": "Materyèl tradisyonèl"
+      }
+    },
+    "cultural_context": {
+      "fr": "Pièce authentique du Musée des Civilisations Noires de Dakar, représentant le patrimoine culturel africain.",
+      "en": "Authentic piece from the Museum of Black Civilizations in Dakar, representing African cultural heritage.",
+      "wo": "Piès otantik ki bokk ci Musée des Civilisations Noires ci Dakar, di wone eritaaj kultural Afrig."
+    }
+  },
+  {
+    "id": "masque-ndomo-bambara-mali",
+    "type": "image",
+    "src": "/artefacts/Masque_Ndomo_mali.jpg",
+    "titles": {
+      "fr": "Masque Ndomo (Bambara – Mali)",
+      "en": "Masque Ndomo (Bambara – Mali)",
+      "wo": "Masque Ndomo (Bambara – Mali)"
+    },
+    "description": {
+      "fr": "Le masque Ndomo est une œuvre bamana (ou bambara) originaire du Mali. Le résumé du fichier précise « Masque Ndomo. Bambara du Mali » et indique qu’il date de la fin du XIXᵉ siècle et qu’il est taillé dans du bois.",
+      "en": "The Ndomo mask is a Bamana (Bambara) work from Mali. The file summary states “Masque Ndomo. Bambara du Mali” and notes that it dates from the late nineteenth century and is carved from wood",
+      "wo": ""
+    },
+    "details": {
+      "origin": {
+        "fr": "Mali",
+        "en": "Mali",
+        "wo": "Mali"
+      },
+      "period": {
+        "fr": "Collection MCN",
+        "en": "MCN Collection",
+        "wo": "Koleksyon MCN"
+      },
+      "material": {
+        "fr": "Matériau traditionnel",
+        "en": "Traditional material",
+        "wo": "Materyèl tradisyonèl"
+      }
+    },
+    "cultural_context": {
+      "fr": "Pièce authentique du Musée des Civilisations Noires de Dakar, représentant le patrimoine culturel africain.",
+      "en": "Authentic piece from the Museum of Black Civilizations in Dakar, representing African cultural heritage.",
+      "wo": "Piès otantik ki bokk ci Musée des Civilisations Noires ci Dakar, di wone eritaaj kultural Afrig."
+    }
+  },
+  {
+    "id": "reproduction-du-crane-dhomo-senegalensis-senegal",
+    "type": "image",
+    "src": "/artefacts/Reproduction_du_crâne_Homo_Senegalensis_senegal.jpg",
+    "titles": {
+      "fr": "Reproduction du crâne d’Homo Senegalensis (Sénégal)",
+      "en": "Reproduction du crâne d’Homo Senegalensis (Sénégal)",
+      "wo": "Reproduction du crâne d’Homo Senegalensis (Sénégal)"
+    },
+    "description": {
+      "fr": "Cette pièce est une reproduction du crâne d’Homo Senegalensis, un fossile découvert en 1972 par Cyr Descamps et Guy Thilmans sur le site de Diorom Boumak au Sénégal. Selon la description, il s’agit d’une « reproduction d’un crâne d’Homo Senegalensis découvert en 1972 » et exposée au MCN. Le fossile original appartient au Paléolithique supérieur tardif et témoigne de la présence d’hominines dans l’actuel Sénégal. La reproduction permet au public de s’immerger dans l’histoire très ancienne du pays.",
+      "en": "This piece is a reproduction of the skull of Homo Senegalensis, a fossil discovered in 1972 by Cyr Descamps and Guy Thilmans at the site of Diorom Boumak in Senegal. The description notes that it is a “reproduction of a skull of Homo Senegalensis discovered in 1972” and exhibited at the MCN.The original fossil belongs to the late Upper Palaeolithic and attests to the presence of hominins in present-day Senegal. The reproduction allows visitors to immerse themselves in the country’s very ancient history.",
+      "wo": ""
+    },
+    "details": {
+      "origin": {
+        "fr": "Sénégal",
+        "en": "Senegal",
+        "wo": "Senegal"
+      },
+      "period": {
+        "fr": "Collection MCN",
+        "en": "MCN Collection",
+        "wo": "Koleksyon MCN"
+      },
+      "material": {
+        "fr": "Matériau traditionnel",
+        "en": "Traditional material",
+        "wo": "Materyèl tradisyonèl"
+      }
+    },
+    "cultural_context": {
+      "fr": "Pièce authentique du Musée des Civilisations Noires de Dakar, représentant le patrimoine culturel africain.",
+      "en": "Authentic piece from the Museum of Black Civilizations in Dakar, representing African cultural heritage.",
+      "wo": "Piès otantik ki bokk ci Musée des Civilisations Noires ci Dakar, di wone eritaaj kultural Afrig."
+    }
+  },
+  {
+    "id": "masque-ceremoniel-serere-senegal",
+    "type": "image",
+    "src": "/artefacts/masque-ceremoniel-serere-senegal.png",
+    "titles": {
+      "fr": "Masque cérémoniel Sérère (Sénégal)",
+      "en": "Masque cérémoniel Sérère (Sénégal)",
+      "wo": "Masque cérémoniel Sérère (Sénégal)"
+    },
+    "description": {
+      "fr": "Devant vous se dresse le masque des anciens Sérères, gardien des rituels et messager entre les vivants et les esprits. Sculpté dans le bois sacré du fromager, il n’était porté qu’à des moments rares — lorsque le village invoquait la pluie, la fertilité, ou la protection des ancêtres. Observez les coquillages incrustés : chacun symbolise une bénédiction, un souhait murmuré aux dieux du fleuve.",
+      "en": "Before you stand the mask of the ancient Serer people — guardian of rituals and messenger between the living and the spirits. Carved from sacred kapok wood, it was worn only during rare moments of invocation — when the village called for rain, fertility, or ancestral protection. Look closely at the embedded shells: each one represents a blessing, a wish whispered to the river gods.",
+      "wo": "Li ngay gis fii mooy turu bu Sereer bi, bu mag yi di jëfandikoo ci njàngale ak seen rakk yi. Ñu defe ko ci garab bu sell bi, bu ñuy jëfandikoo ci jamono yu sell — bu ñu bëgg naataange, ñàkk, walla ndimbalug askan wi.Xoolal coow yi ci kaw — benn ci benn mooy barkeel, benn baat bu ñu wax ci yoonu roog yi."
+    },
+    "audio": {
+      "fr": "/audios/masque_serere_fr.mp3",
+      "en": "/audios/masque_serere_en.mp3",
+      "wo": "/audios/masque_serere_wo.mp3"
+    },
+    "details": {
+      "origin": {
+        "fr": "Sénégal",
+        "en": "Senegal",
+        "wo": "Senegal"
+      },
+      "period": {
+        "fr": "Collection MCN",
+        "en": "MCN Collection",
+        "wo": "Koleksyon MCN"
+      },
+      "material": {
+        "fr": "Matériau traditionnel",
+        "en": "Traditional material",
+        "wo": "Materyèl tradisyonèl"
+      }
+    },
+    "cultural_context": {
+      "fr": "Pièce authentique du Musée des Civilisations Noires de Dakar, représentant le patrimoine culturel africain.",
+      "en": "Authentic piece from the Museum of Black Civilizations in Dakar, representing African cultural heritage.",
+      "wo": "Piès otantik ki bokk ci Musée des Civilisations Noires ci Dakar, di wone eritaaj kultural Afrig."
+    }
+  },
+  {
+    "id": "tambour-royal-du-royaume-du-djolof-senegal",
+    "type": "image",
+    "src": "/artefacts/tambour-royal-du-royaume-du-djolof-senegal.png",
+    "titles": {
+      "fr": "Tambour royal du Royaume du Djolof (Sénégal)",
+      "en": "Tambour royal du Royaume du Djolof (Sénégal)",
+      "wo": "Tambour royal du Royaume du Djolof (Sénégal)"
+    },
+    "description": {
+      "fr": "Ce tambour majestueux, façonné dans le bois sacré et recouvert d'une peau soigneusement tendue, résonnait au rythme des cérémonies royales. Chaque battement portait la voix des anciens et le souffle du royaume, unissant le peuple dans la danse et le chant.",
+      "en": "This majestic drum, carved from sacred wood and covered with tightly stretched hide, echoed during royal ceremonies. Each beat carried the voice of ancestors and the breath of the kingdom, uniting the people in dance and song.",
+      "wo": "Tamburu bii, mu ame ca wàllu liggéey gu xelal ak laaj, mu ñuy yéwul ca weeru ay jàmm, mu ngi teg sañ-sañi ndaw ñépp ak xel bu réew."
+    },
+    "audio": {
+      "fr": "/audios/tambour_djolof_fr.mp3",
+      "en": "/audios/tambour_djolof_en.mp3",
+      "wo": "/audios/tambour_djolof_wo.mp3"
+    },
+    "details": {
+      "origin": {
+        "fr": "Sénégal",
+        "en": "Senegal",
+        "wo": "Senegal"
+      },
+      "period": {
+        "fr": "Collection MCN",
+        "en": "MCN Collection",
+        "wo": "Koleksyon MCN"
+      },
+      "material": {
+        "fr": "Matériau traditionnel",
+        "en": "Traditional material",
+        "wo": "Materyèl tradisyonèl"
+      }
+    },
+    "cultural_context": {
+      "fr": "Pièce authentique du Musée des Civilisations Noires de Dakar, représentant le patrimoine culturel africain.",
+      "en": "Authentic piece from the Museum of Black Civilizations in Dakar, representing African cultural heritage.",
+      "wo": "Piès otantik ki bokk ci Musée des Civilisations Noires ci Dakar, di wone eritaaj kultural Afrig."
+    }
+  },
+  {
+    "id": "pagne-tisse-lebou-senegal",
+    "type": "image",
+    "src": "/artefacts/pagne-tisse-lebou-senegal.png",
+    "titles": {
+      "fr": "Pagne tissé Lébou (Sénégal)",
+      "en": "Pagne tissé Lébou (Sénégal)",
+      "wo": "Pagne tissé Lébou (Sénégal)"
+    },
+    "description": {
+      "fr": "Ce pagne délicatement tissé par les artisans Lébou raconte les histoires des ancêtres et des cérémonies. Les motifs géométriques et les couleurs chatoyantes expriment l’identité et la fierté du peuple Lébou, vibrant à chaque geste porté.",
+      "en": "This cloth, delicately woven by Lébou artisans, tells stories of ancestors and ceremonies. The geometric patterns and shimmering colors express the identity and pride of the Lébou people, alive in every gesture.",
+      "wo": "Pagne bii, mu jëm ci liggéey yu Lébou, mu di wax ci xibaar yi ak njariñ yi. Njàngale ak wër-wer yi di teg ci xeet Lébou, mu ngi doy ak doxantu bu réew."
+    },
+    "audio": {
+      "fr": "/audios/pagne_lebou_fr.mp3",
+      "en": "/audios/pagne_lebou_en.mp3",
+      "wo": "/audios/pagne_lebou_wo.mp3"
+    },
+    "details": {
+      "origin": {
+        "fr": "Sénégal",
+        "en": "Senegal",
+        "wo": "Senegal"
+      },
+      "period": {
+        "fr": "Collection MCN",
+        "en": "MCN Collection",
+        "wo": "Koleksyon MCN"
+      },
+      "material": {
+        "fr": "Matériau traditionnel",
+        "en": "Traditional material",
+        "wo": "Materyèl tradisyonèl"
+      }
+    },
+    "cultural_context": {
+      "fr": "Pièce authentique du Musée des Civilisations Noires de Dakar, représentant le patrimoine culturel africain.",
+      "en": "Authentic piece from the Museum of Black Civilizations in Dakar, representing African cultural heritage.",
+      "wo": "Piès otantik ki bokk ci Musée des Civilisations Noires ci Dakar, di wone eritaaj kultural Afrig."
+    }
+  },
+  {
+    "id": "statue-dogon-de-lesprit-protecteur-mali",
+    "type": "image",
+    "src": "/artefacts/statue-dogon-de-lesprit-protecteur-mali.png",
+    "titles": {
+      "fr": "Statue Dogon de l’esprit protecteur (Mali)",
+      "en": "Statue Dogon de l’esprit protecteur (Mali)",
+      "wo": "Statue Dogon de l’esprit protecteur (Mali)"
+    },
+    "description": {
+      "fr": "Cette statue en bois sculpté, représentant un esprit protecteur, veille sur le village et ses habitants. Ses formes stylisées et ses traits abstraits traduisent la spiritualité profonde et les légendes ancestrales des Dogon, entre ciel et terre.",
+      "en": "This carved wooden statue, representing a protective spirit, watches over the village and its inhabitants. Its stylized forms and abstract features reflect the deep spirituality and ancestral legends of the Dogon, between heaven and earth.",
+      "wo": "Statwu bii, mu nekk ci wàllu xel ak njàmm, mu ngi xeex ci njariñ ak nit ñi. Ñaari mbind mi ak wër-wer yi di wone xel ak njariñ bu Dogon."
+    },
+    "audio": {
+      "fr": "/audios/statue_dogon_fr.mp3",
+      "en": "/audios/statue_dogon_en.mp3",
+      "wo": "/audios/statue_dogon_wo.mp3"
+    },
+    "details": {
+      "origin": {
+        "fr": "Mali",
+        "en": "Mali",
+        "wo": "Mali"
+      },
+      "period": {
+        "fr": "Collection MCN",
+        "en": "MCN Collection",
+        "wo": "Koleksyon MCN"
+      },
+      "material": {
+        "fr": "Matériau traditionnel",
+        "en": "Traditional material",
+        "wo": "Materyèl tradisyonèl"
+      }
+    },
+    "cultural_context": {
+      "fr": "Pièce authentique du Musée des Civilisations Noires de Dakar, représentant le patrimoine culturel africain.",
+      "en": "Authentic piece from the Museum of Black Civilizations in Dakar, representing African cultural heritage.",
+      "wo": "Piès otantik ki bokk ci Musée des Civilisations Noires ci Dakar, di wone eritaaj kultural Afrig."
+    }
+  },
+  {
+    "id": "bracelet-en-or-de-lempire-ashanti-ghana",
+    "type": "image",
+    "src": "/artefacts/bracelet-en-or-de-lempire-ashanti-ghana.png",
+    "titles": {
+      "fr": "Bracelet en or de l’Empire Ashanti (Ghana)",
+      "en": "Bracelet en or de l’Empire Ashanti (Ghana)",
+      "wo": "Bracelet en or de l’Empire Ashanti (Ghana)"
+    },
+    "description": {
+      "fr": "Ce bracelet en or fin, orné de symboles ancestraux, était porté par les rois et les dignitaires. Il incarne le pouvoir, la richesse et la spiritualité de l’Empire Ashanti, un témoignage de prestige et de savoir-faire ancestral.",
+      "en": "This fine gold bracelet, adorned with ancestral symbols, was worn by kings and dignitaries. It embodies the power, wealth, and spirituality of the Ashanti Empire, a testament to prestige and ancestral craftsmanship.",
+      "wo": "Ndambu bii, mu ame ci wër-wer yu njàmm, mu ngi xew ci boroom ak njariñ. Mu ngi wax ci doxantu, doxandéem ak xel bu Ashanti."
+    },
+    "audio": {
+      "wo": "/audios/bracelet_ashanti_wo.mp3"
+    },
+    "details": {
+      "origin": {
+        "fr": "Ghana",
+        "en": "Ghana",
+        "wo": "Ghana"
+      },
+      "period": {
+        "fr": "Collection MCN",
+        "en": "MCN Collection",
+        "wo": "Koleksyon MCN"
+      },
+      "material": {
+        "fr": "Or",
+        "en": "Gold",
+        "wo": "Lò"
+      }
+    },
+    "cultural_context": {
+      "fr": "Pièce authentique du Musée des Civilisations Noires de Dakar, représentant le patrimoine culturel africain.",
+      "en": "Authentic piece from the Museum of Black Civilizations in Dakar, representing African cultural heritage.",
+      "wo": "Piès otantik ki bokk ci Musée des Civilisations Noires ci Dakar, di wone eritaaj kultural Afrig."
+    }
+  }
+]

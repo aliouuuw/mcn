@@ -1,270 +1,29 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 
-// Import artifacts data (we'll need to make this available globally or import it)
-const artifacts = [
-  {
-    id: "traditional-mask",
-    type: "image",
-    src: "/artifacts/artifact-1.jpg",
-    titles: {
-      fr: "Masque Traditionnel",
-      en: "Traditional Mask",
-      wo: "Masq Tradisyonèl",
-    },
-    audio: {
-      src: "/audio/traditional-mask-narration.mp3",
-      duration: "2:45",
-      languages: ["fr", "en", "wo"]
-    },
-    description: {
-      fr: "Ce masque traditionnel incarne l'esprit des anciens et raconte l'histoire des rites initiatiques de nos ancêtres. Fabriqué selon des techniques ancestrales, il représente la connexion profonde entre l'homme et les forces spirituelles.",
-      en: "This traditional mask embodies the spirit of the ancients and tells the story of our ancestors' initiation rites. Crafted using ancestral techniques, it represents the deep connection between man and spiritual forces.",
-      wo: "Masq sa a enkòne lespri ansyen yo epi li rakonte istwa rit inisyasyon zansèt nou yo. Fabrike selon teknik ansèstral, li reprezante koneksyon pwofon ant moun ak fòs espirityèl yo.",
-    },
-    details: {
-      origin: {
-        fr: "Région du Sine-Saloum, Sénégal",
-        en: "Sine-Saloum Region, Senegal",
-        wo: "Rejyon Sine-Saloum, Senegal",
-      },
-      period: {
-        fr: "XIXe siècle",
-        en: "19th Century",
-        wo: "19yèm syèk",
-      },
-      material: {
-        fr: "Bois sculpté et pigments naturels",
-        en: "Carved wood and natural pigments",
-        wo: "Bwa skilte ak pigman natirèl",
-      },
-      dimensions: {
-        fr: "45cm x 30cm x 8cm",
-        en: "45cm x 30cm x 8cm",
-        wo: "45cm x 30cm x 8cm",
-      },
-    },
-    cultural_context: {
-      fr: "Les masques traditionnels jouent un rôle central dans les cérémonies sociales et spirituelles. Ils servent de médiateurs entre le monde visible et invisible, permettant aux ancêtres de communiquer avec les vivants.",
-      en: "Traditional masks play a central role in social and spiritual ceremonies. They serve as mediators between the visible and invisible worlds, allowing ancestors to communicate with the living.",
-      wo: "Masq tradisyonèl yo jwe yon wòl santral nan seremoni sosyal ak espirityèl. Yo sèvi kòm medyatè ant mond vizib la ak mond envizib la, sa ki pèmèt zansèt yo kominike ak moun vivan yo.",
-    },
-  },
-  {
-    id: "kente-textile",
-    type: "image",
-    src: "/artifacts/artifact-2.jpg",
-    titles: {
-      fr: "Textile Kente",
-      en: "Kente Textile",
-      wo: "Tekstil Kente",
-    },
-    audio: {
-      src: "/audio/kente-textile-narration.mp3",
-      duration: "3:12",
-      languages: ["fr", "en", "wo"]
-    },
-    description: {
-      fr: "Le kente est un tissu africain traditionnel tissé à la main, symbole de statut et d'héritage culturel. Chaque motif raconte une histoire et transmet des valeurs ancestrales à travers des générations.",
-      en: "Kente is a traditional African handwoven fabric, symbol of status and cultural heritage. Each pattern tells a story and transmits ancestral values across generations.",
-      wo: "Kente se yon twal afriken tradisyonèl ki tise ak men, senbòl estati ak eritaj kiltirèl. Chak motif rakonte yon istwa epi li transmèt valè zansèstral atravè jenerasyon.",
-    },
-    details: {
-      origin: {
-        fr: "Ghana (Région d'Ashanti)",
-        en: "Ghana (Ashanti Region)",
-        wo: "Ghana (Rejyon Ashanti)",
-      },
-      period: {
-        fr: "XXe siècle",
-        en: "20th Century",
-        wo: "20yèm syèk",
-      },
-      material: {
-        fr: "Coton filé et teint naturellement",
-        en: "Hand-spun and naturally dyed cotton",
-        wo: "Koton file ak men epi li te ye natirèlman",
-      },
-      dimensions: {
-        fr: "200cm x 45cm",
-        en: "200cm x 45cm",
-        wo: "200cm x 45cm",
-      },
-    },
-    cultural_context: {
-      fr: "Le kente est porté lors d'occasions spéciales et de cérémonies importantes. Les motifs symbolisent des proverbes, des événements historiques et des qualités morales, créant un langage visuel riche.",
-      en: "Kente is worn on special occasions and important ceremonies. The patterns symbolize proverbs, historical events and moral qualities, creating a rich visual language.",
-      wo: "Kente yo mete nan okazyon espesyal ak seremoni enpòtan. Motif yo senbolize pwovèb, evènman istorik ak kalite moral, sa ki kreye yon langaj vizyèl rich.",
-    },
-  },
-  {
-    id: "ancient-sculpture",
-    type: "image",
-    src: "/artifacts/artifact-3.jpg",
-    titles: {
-      fr: "Sculpture Ancienne",
-      en: "Ancient Sculpture",
-      wo: "Sikilti Ansyen",
-    },
-    audio: {
-      src: "/audio/ancient-sculpture-narration.mp3",
-      duration: "2:58",
-      languages: ["fr", "en", "wo"]
-    },
-    description: {
-      fr: "Cette sculpture ancienne représente une figure spirituelle protectrice, gardienne des traditions et des valeurs ancestrales. Son style minimaliste et expressif capture l'essence de l'art africain traditionnel.",
-      en: "This ancient sculpture represents a protective spiritual figure, guardian of traditions and ancestral values. Its minimalist and expressive style captures the essence of traditional African art.",
-      wo: "Sikilti ansyen sa a reprezante yon figi espirityèl pwotèktè, gadyen tradisyon ak valè zansètral. Style minimalist ak ekspresif li a kaptire sans atizay afriken tradisyonèl la.",
-    },
-    details: {
-      origin: {
-        fr: "Région du Mali",
-        en: "Mali Region",
-        wo: "Rejyon Mali",
-      },
-      period: {
-        fr: "XVIe siècle",
-        en: "16th Century",
-        wo: "16yèm syèk",
-      },
-      material: {
-        fr: "Bois dur et patine naturelle",
-        en: "Hardwood and natural patina",
-        wo: "Bwa di ak patin natirèl",
-      },
-      dimensions: {
-        fr: "120cm x 25cm x 20cm",
-        en: "120cm x 25cm x 20cm",
-        wo: "120cm x 25cm x 20cm",
-      },
-    },
-    cultural_context: {
-      fr: "Les sculptures anciennes servaient de supports spirituels dans les rituels quotidiens et les cérémonies importantes. Elles étaient placées dans les autels domestiques pour protéger la famille.",
-      en: "Ancient sculptures served as spiritual supports in daily rituals and important ceremonies. They were placed in domestic altars to protect the family.",
-      wo: "Sikilti ansyen yo te sèvi kòm sipò espirityèl nan rit quotilyen ak seremoni enpòtan. Yo te plase yo nan lotèl domestik pou pwoteje fanmi an.",
-    },
-  },
-  {
-    id: "ceremonial-mask",
-    type: "image",
-    src: "/artifacts/artifact-4.jpg",
-    titles: {
-      fr: "Masque Cerémonial",
-      en: "Ceremonial Mask",
-      wo: "Mas Seremoni",
-    },
-    audio: {
-      src: "/audio/ceremonial-mask-narration.mp3",
-      duration: "3:34",
-      languages: ["fr", "en", "wo"]
-    },
-    description: {
-      fr: "Ce masque cérémonial est utilisé lors des rites de passage et des célébrations communautaires. Ses formes stylisées et ses motifs symboliques racontent l'histoire de la communauté et de ses traditions.",
-      en: "This ceremonial mask is used during rites of passage and community celebrations. Its stylized forms and symbolic patterns tell the story of the community and its traditions.",
-      wo: "Mas seremoni sa a yo itilize pandan rit pasaj ak selebrasyon kominotè. Fòm stilize li yo ak motif senbolik rakonte istwa kominote a ak tradisyon li yo.",
-    },
-    details: {
-      origin: {
-        fr: "Côte d'Ivoire",
-        en: "Ivory Coast",
-        wo: "Kòt Ivwa",
-      },
-      period: {
-        fr: "XVIIIe siècle",
-        en: "18th Century",
-        wo: "18yèm syèk",
-      },
-      material: {
-        fr: "Bois sculpté avec incrustations de cauris",
-        en: "Carved wood with cowrie shell inlays",
-        wo: "Bwa skilte ak enklistasyon kauri",
-      },
-      dimensions: {
-        fr: "60cm x 40cm x 15cm",
-        en: "60cm x 40cm x 15cm",
-        wo: "60cm x 40cm x 15cm",
-      },
-    },
-    cultural_context: {
-      fr: "Les masques cérémoniels sont portés par des danseurs initiés lors des grandes cérémonies. Ils incarnent les esprits des ancêtres et servent de lien entre les générations passées et présentes.",
-      en: "Ceremonial masks are worn by initiated dancers during major ceremonies. They embody the spirits of ancestors and serve as a link between past and present generations.",
-      wo: "Mas seremoni yo danse yo mete pandan gwo seremoni. Yo enkòne lespri zansèt yo epi yo sèvi kòm lyen ant jenerasyon pase ak prezan yo.",
-    },
-  },
-  {
-    id: "funeral-ritual",
-    type: "video",
-    src: "/artifacts/video-placeholder.png",
-    thumbnail: "/artifacts/video-placeholder.png",
-    titles: {
-      fr: "Rituel Funéraire",
-      en: "Funeral Ritual",
-      wo: "Rit Fonèb",
-    },
-    audio: {
-      src: "/audio/funeral-ritual-narration.mp3",
-      duration: "4:12",
-      languages: ["fr", "en", "wo"]
-    },
-    description: {
-      fr: "Cette vidéo documentaire capture un rituel funéraire traditionnel, montrant comment les communautés africaines honorent leurs défunts et accompagnent leur passage vers l'au-delà.",
-      en: "This documentary video captures a traditional funeral ritual, showing how African communities honor their deceased and accompany their passage to the afterlife.",
-      wo: "Videyo dokimantè sa a kaptire yon rit fonèb tradisyonèl, ki montre kijan kominote afriken yo onore moun ki mouri yo epi akonpaye pasaj yo nan lòt bò a.",
-    },
-    details: {
-      origin: {
-        fr: "Sénégal",
-        en: "Senegal",
-        wo: "Senegal",
-      },
-      period: {
-        fr: "Contemporain",
-        en: "Contemporary",
-        wo: "Kontanporen",
-      },
-      material: {
-        fr: "Documentaire vidéo",
-        en: "Video documentary",
-        wo: "Dokimantè videyo",
-      },
-      duration: {
-        fr: "12 minutes",
-        en: "12 minutes",
-        wo: "12 minit",
-      },
-    },
-    cultural_context: {
-      fr: "Les rituels funéraires sont essentiels dans les cultures africaines. Ils permettent de maintenir les liens avec les ancêtres et d'assurer la continuité spirituelle de la communauté.",
-      en: "Funeral rituals are essential in African cultures. They allow maintaining links with ancestors and ensuring the spiritual continuity of the community.",
-      wo: "Rit fonèb yo esansyèl nan kilti afriken yo. Yo pèmèt kenbe lyen ak zansèt yo epi asire kontinwite espirityèl kominote a.",
-    },
-  },
-]
+// Import real artifacts data
+import artifactsData from '../../artifacts_data.json'
 
-// Animation variants
+const artifacts = artifactsData
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.1
+      staggerChildren: 0.15,
+      ease: [0.25, 0.46, 0.45, 0.94]
     }
   }
 }
 
 const textVariants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-    scale: 0.98
-  },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
     transition: {
       duration: 0.6,
       ease: [0.25, 0.46, 0.45, 0.94]
@@ -272,35 +31,51 @@ const textVariants = {
   }
 }
 
-const heroVariants = {
-  hidden: {
-    opacity: 0,
-    scale: 0.95,
-    y: 30
+const uiText = {
+  back: {
+    fr: 'Retour aux collections',
+    en: 'Back to collections',
+    wo: 'Dellusi ci koleksiyoŋ'
   },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.25, 0.46, 0.45, 0.94]
-    }
-  }
-}
-
-const navVariants = {
-  hidden: {
-    opacity: 0,
-    x: -20
+  story: {
+    fr: 'L’histoire',
+    en: 'The story',
+    wo: 'Leeral gi'
   },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.5,
-      ease: "easeOut"
-    }
+  quickInfo: {
+    fr: 'Détails essentiels',
+    en: 'Key details',
+    wo: 'Liem yi gëna am solo'
+  },
+  origin: {
+    fr: 'Origine',
+    en: 'Origin',
+    wo: 'Orijin'
+  },
+  listen: {
+    fr: 'Écouter la narration',
+    en: 'Listen to the narration',
+    wo: 'Degg waxinu waxtaan'
+  },
+  available: {
+    fr: 'Disponible',
+    en: 'Available',
+    wo: 'Disponib'
+  },
+  notAvailable: {
+    fr: 'Non disponible',
+    en: 'Not available',
+    wo: 'Pa disponib'
+  },
+  previous: {
+    fr: 'Précédent',
+    en: 'Previous',
+    wo: 'Anvan'
+  },
+  next: {
+    fr: 'Suivant',
+    en: 'Next',
+    wo: 'Apre'
   }
 }
 
@@ -316,6 +91,7 @@ function ArtifactPage() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [audioProgress, setAudioProgress] = useState(0)
   const [audioDuration, setAudioDuration] = useState(0)
+  const audioRef = useRef(null)
 
   // Find the artifact by ID
   const artifact = artifacts.find(a => a.id === id)
@@ -353,330 +129,350 @@ function ArtifactPage() {
     navigate({ to: `/artifact/${prevArtifact.id}` })
   }
 
-  const handleBackToCollections = () => {
-    navigate({ to: '/collections' })
+  // Get audio file path based on artifact ID and language
+  const getAudioPath = (artifactId, language) => {
+    const audioMap = {
+      'masque-ceremoniel-serere-senegal': {
+        fr: '/audios/masque_serere_fr.mp3',
+        en: '/audios/masque_serere_en.mp3',
+        wo: '/audios/masque_serere_wo.mp3'
+      },
+      'tambour-royal-du-royaume-du-djolof-senegal': {
+        fr: '/audios/tambour_djolof_fr.mp3',
+        en: '/audios/tambour_djolof_en.mp3',
+        wo: '/audios/tambour_djolof_wo.mp3'
+      },
+      'pagne-tisse-lebou-senegal': {
+        fr: '/audios/pagne_lebou_fr.mp3',
+        en: '/audios/pagne_lebou_en.mp3',
+        wo: '/audios/pagne_lebou_wo.mp3'
+      },
+      'statue-dogon-de-lesprit-protecteur-mali': {
+        fr: '/audios/statue_dogon_fr.mp3',
+        en: '/audios/statue_dogon_en.mp3',
+        wo: '/audios/statue_dogon_wo.mp3'
+      },
+      'bracelet-en-or-de-lempire-ashanti-ghana': {
+        wo: '/audios/bracelet_ashanti_wo.mp3'
+      }
+    }
+    return audioMap[artifactId]?.[language] || null
   }
 
   // Audio player controls
   const toggleAudio = () => {
-    setIsPlaying(!isPlaying)
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause()
+      } else {
+        audioRef.current.play()
+      }
+      setIsPlaying(!isPlaying)
+    }
   }
 
   const handleProgressChange = (e) => {
-    setAudioProgress(e.target.value)
+    const newProgress = e.target.value
+    setAudioProgress(newProgress)
+    if (audioRef.current) {
+      audioRef.current.currentTime = (newProgress / 100) * audioDuration
+    }
   }
 
   const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = Math.floor(seconds % 60)
-    return `${mins}:${secs.toString().padStart(2, '0')}`
+    const secs = Math.max(seconds, 0)
+    const mins = Math.floor(secs / 60)
+    const remaining = Math.floor(secs % 60)
+    return `${mins}:${remaining.toString().padStart(2, '0')}`
   }
+
+  const currentAudioPath = getAudioPath(artifact.id, currentLanguage)
+
+  // Audio event handlers
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    const updateProgress = () => {
+      if (audio.duration) {
+        setAudioProgress((audio.currentTime / audio.duration) * 100)
+      }
+    }
+
+    const updateDuration = () => {
+      setAudioDuration(audio.duration)
+    }
+
+    const handleEnded = () => {
+      setIsPlaying(false)
+      setAudioProgress(0)
+    }
+
+    audio.addEventListener('timeupdate', updateProgress)
+    audio.addEventListener('loadedmetadata', updateDuration)
+    audio.addEventListener('ended', handleEnded)
+
+    return () => {
+      audio.removeEventListener('timeupdate', updateProgress)
+      audio.removeEventListener('loadedmetadata', updateDuration)
+      audio.removeEventListener('ended', handleEnded)
+    }
+  }, [currentAudioPath])
+
+  // Reset audio when language changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.pause()
+      setIsPlaying(false)
+      setAudioProgress(0)
+    }
+  }, [currentLanguage])
+
+  const languageOptions = ['fr', 'en', 'wo']
+  const titleText = artifact.titles[currentLanguage] || artifact.titles.fr || artifact.titles.en
+  const descriptionText = artifact.description[currentLanguage] || artifact.description.fr || artifact.description.en
+  const originText =
+    (artifact.details?.origin?.[currentLanguage]) ??
+    artifact.details?.origin?.fr ??
+    artifact.details?.origin?.en ??
+    artifact.details?.origin?.wo ??
+    ''
 
   return (
     <motion.div
-      className="min-h-screen relative overflow-hidden"
+      className="min-h-screen bg-[#f4f4f0] text-[#2f2f2f]"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      style={{ backgroundColor: 'var(--color-warm-white)' }}
     >
-      {/* Background overlay similar to home page */}
-      <div className="absolute inset-0 artifact-bg-overlay" aria-hidden="true" />
-
-      {/* Hero Section */}
-      <motion.section
-        className="pt-32 pb-16 px-6 md:px-12 relative"
-        variants={heroVariants}
-      >
-        {/* Side Navigation Buttons */}
-        <motion.button
-          onClick={handlePrev}
-          className="fixed left-6 top-1/2 transform -translate-y-1/2 z-30 hidden lg:flex items-center gap-3 text-[var(--color-soft-black)] hover:text-[var(--color-terracotta)] transition-colors group bg-white/80 backdrop-blur-sm px-4 py-3 rounded-full border border-white/20 shadow-lg"
-          variants={navVariants}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+      <div className="mx-auto max-w-5xl px-6 pb-12 pt-32 md:pb-16 md:pt-32">
+        <motion.header
+          className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+          variants={textVariants}
         >
-          <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          <div className="text-left hidden xl:block">
-            <div className="text-xs opacity-60" style={{ fontFamily: 'var(--font-accent)' }}>
-              {currentLanguage === 'fr' ? 'Précédent' :
-               currentLanguage === 'en' ? 'Previous' :
-               'Anvan'}
-            </div>
-            <div className="text-sm font-medium" style={{ fontFamily: 'var(--font-body)' }}>{prevArtifact.titles[currentLanguage]}</div>
-          </div>
-        </motion.button>
-
-        <motion.button
-          onClick={handleNext}
-          className="fixed right-6 top-1/2 transform -translate-y-1/2 z-30 hidden lg:flex items-center gap-3 text-[var(--color-soft-black)] hover:text-[var(--color-terracotta)] transition-colors group bg-white/80 backdrop-blur-sm px-4 py-3 rounded-full border border-white/20 shadow-lg"
-          variants={navVariants}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <div className="text-right hidden xl:block">
-            <div className="text-xs opacity-60" style={{ fontFamily: 'var(--font-accent)' }}>
-              {currentLanguage === 'fr' ? 'Suivant' :
-               currentLanguage === 'en' ? 'Next' :
-               'Apre'}
-            </div>
-            <div className="text-sm font-medium" style={{ fontFamily: 'var(--font-body)' }}>{nextArtifact.titles[currentLanguage]}</div>
-          </div>
-          <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </motion.button>
-
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Artifact Media */}
-            <motion.div
-              className="relative"
-              variants={heroVariants}
-            >
-              <div className="relative aspect-square max-w-md mx-auto lg:max-w-none">
-                <div className={`absolute inset-0 bg-white/20 backdrop-blur-sm rounded-2xl transition-opacity duration-500 ${isImageLoaded ? 'opacity-0' : 'opacity-100'}`} />
-                <img
-                  src={artifact.type === 'video' ? artifact.thumbnail : artifact.src}
-                  alt={artifact.titles[currentLanguage]}
-                  className={`w-full h-full object-cover rounded-2xl shadow-2xl transition-all duration-500 ${
-                    isImageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
-                  }`}
-                  onLoad={() => setIsImageLoaded(true)}
-                />
-                {artifact.type === 'video' && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="bg-black/50 rounded-full p-4">
-                      <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-
-            {/* Artifact Info */}
-            <motion.div
-              className="space-y-8"
-              variants={textVariants}
-            >
-              <div>
-                <motion.h1
-                  className="hero-title"
-                  variants={textVariants}
-                  style={{
-                    fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
-                    background: 'linear-gradient(135deg, var(--color-soft-black) 0%, var(--color-earth) 50%, var(--color-terracotta) 100%)',
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundSize: '200% 200%',
-                    marginBottom: '1.5rem'
-                  }}
-                >
-                  {artifact.titles[currentLanguage]}
-                </motion.h1>
-                <motion.p
-                  className="hero-subtitle"
-                  variants={textVariants}
-                >
-                  {artifact.description[currentLanguage]}
-                </motion.p>
-              </div>
-
-              {/* Audio Player */}
-              {artifact.audio && (
-                <motion.div
-                  className="mt-8"
-                  variants={textVariants}
-                >
-                  <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-lg">
-                    <div className="flex items-center gap-4 mb-4">
-                      <button
-                        onClick={toggleAudio}
-                        className="flex items-center justify-center w-12 h-12 bg-[var(--color-terracotta)] text-white rounded-full hover:bg-[var(--color-earth)] transition-colors shadow-lg"
-                      >
-                        {isPlaying ? (
-                          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M6 4h4v16H6V4zM14 4h4v16h-4V4z"/>
-                          </svg>
-                        ) : (
-                          <svg className="w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                          </svg>
-                        )}
-                      </button>
-
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between text-sm mb-2">
-                          <span style={{ color: 'var(--color-soft-black)', fontFamily: 'var(--font-accent)' }}>
-                            {currentLanguage === 'fr' ? 'Narration Audio' :
-                             currentLanguage === 'en' ? 'Audio Narration' :
-                             'Narasyon Odio'}
-                          </span>
-                          <span style={{ color: 'var(--color-soft-black)', opacity: 0.7 }}>
-                            {formatTime(audioProgress)} / {artifact.audio.duration}
-                          </span>
-                        </div>
-
-                        <div className="relative">
-                          <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={audioProgress}
-                            onChange={handleProgressChange}
-                            className="w-full h-2 bg-white/50 rounded-lg appearance-none cursor-pointer slider"
-                          />
-                          <div className="absolute top-0 left-0 h-2 bg-[var(--color-terracotta)] rounded-lg pointer-events-none"
-                               style={{ width: `${audioProgress}%` }} />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 text-sm" style={{ color: 'var(--color-soft-black)', opacity: 0.8 }}>
-                      <span className="flex items-center gap-2">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
-                        </svg>
-                        {artifact.audio.languages.includes(currentLanguage) ?
-                         (currentLanguage === 'fr' ? 'Disponible' :
-                          currentLanguage === 'en' ? 'Available' :
-                          'Disponib') :
-                         (currentLanguage === 'fr' ? 'Non disponible' :
-                          currentLanguage === 'en' ? 'Not available' :
-                          'Pa disponib')}
-                      </span>
-                      <span className="text-xs opacity-60">
-                        {currentLanguage === 'fr' ? 'Langues: FR, EN, WO' :
-                         currentLanguage === 'en' ? 'Languages: FR, EN, WO' :
-                         'Lang: FR, EN, WO'}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Details Grid */}
-              <motion.div
-                className="grid grid-cols-1 sm:grid-cols-2 gap-6"
-                variants={containerVariants}
-              >
-                {Object.entries(artifact.details).map(([key, value]) => (
-                  <motion.div
-                    key={key}
-                    className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/20"
-                    variants={textVariants}
-                  >
-                    <div
-                      className="text-sm uppercase tracking-wider mb-1 opacity-70"
-                      style={{
-                        color: 'var(--color-soft-black)',
-                        fontFamily: 'var(--font-accent)',
-                        fontSize: '0.75rem'
-                      }}
-                    >
-                      {key === 'origin' && (currentLanguage === 'fr' ? 'Origine' : currentLanguage === 'en' ? 'Origin' : 'Orijin')}
-                      {key === 'period' && (currentLanguage === 'fr' ? 'Période' : currentLanguage === 'en' ? 'Period' : 'Peryòd')}
-                      {key === 'material' && (currentLanguage === 'fr' ? 'Matériau' : currentLanguage === 'en' ? 'Material' : 'Materyèl')}
-                      {key === 'dimensions' && (currentLanguage === 'fr' ? 'Dimensions' : currentLanguage === 'en' ? 'Dimensions' : 'Dimansyon')}
-                      {key === 'duration' && (currentLanguage === 'fr' ? 'Durée' : currentLanguage === 'en' ? 'Duration' : 'Dire')}
-                    </div>
-                    <div
-                      className="font-medium"
-                      style={{
-                        color: 'var(--color-soft-black)',
-                        fontFamily: 'var(--font-body)'
-                      }}
-                    >
-                      {value[currentLanguage]}
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Mobile Navigation (visible on smaller screens) */}
-        <div className="lg:hidden mt-12 flex items-center justify-between">
-          <motion.button
-            onClick={handlePrev}
-            className="flex items-center gap-2 text-[var(--color-soft-black)] hover:text-[var(--color-terracotta)] transition-colors group bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 shadow-lg"
-            variants={navVariants}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
+            onClick={() => navigate({ to: '/collections' })}
+            className="flex w-fit items-center gap-2 rounded-full border border-[#e5dbcf] bg-white/70 px-4 py-2 text-sm font-medium text-[#4a4136] transition hover:border-[#d1c1ad] hover:bg-white"
           >
-            <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            <div className="text-left">
-              <div className="text-xs opacity-60" style={{ fontFamily: 'var(--font-accent)' }}>
-                {currentLanguage === 'fr' ? 'Précédent' :
-                 currentLanguage === 'en' ? 'Previous' :
-                 'Anvan'}
-              </div>
-              <div className="text-sm font-medium" style={{ fontFamily: 'var(--font-body)' }}>{prevArtifact.titles[currentLanguage]}</div>
-            </div>
-          </motion.button>
+            <span>{uiText.back[currentLanguage]}</span>
+          </button>
 
-          <motion.button
-            onClick={handleNext}
-            className="flex items-center gap-2 text-[var(--color-soft-black)] hover:text-[var(--color-terracotta)] transition-colors group bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 shadow-lg"
-            variants={navVariants}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <div className="text-right">
-              <div className="text-xs opacity-60" style={{ fontFamily: 'var(--font-accent)' }}>
-                {currentLanguage === 'fr' ? 'Suivant' :
-                 currentLanguage === 'en' ? 'Next' :
-                 'Apre'}
-              </div>
-              <div className="text-sm font-medium" style={{ fontFamily: 'var(--font-body)' }}>{nextArtifact.titles[currentLanguage]}</div>
-            </div>
-            <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </motion.button>
-        </div>
-      </motion.section>
+          <div className="flex w-full flex-wrap items-center gap-2 md:w-auto md:justify-end">
+            {languageOptions.map((lang) => (
+              <button
+                key={lang}
+                onClick={() => handleLanguageChange(lang)}
+                className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                  currentLanguage === lang
+                    ? 'bg-[#CD853F] text-white shadow-sm'
+                    : 'border border-transparent bg-white/70 text-[#4a4136] hover:border-[#e5dbcf]'
+                }`}
+                style={{ fontFamily: 'var(--font-accent)' }}
+              >
+                {lang === 'fr' ? 'Français' : lang === 'en' ? 'English' : 'Wolof'}
+              </button>
+            ))}
+          </div>
+        </motion.header>
 
-      {/* Cultural Context Section */}
-      <motion.section
-        className="py-16 px-6 md:px-12 bg-white/30 backdrop-blur-sm"
-        variants={containerVariants}
-      >
-        <div className="max-w-4xl mx-auto">
+        <div className="mt-12 grid gap-10 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] md:gap-14">
           <motion.div
-            className="text-center mb-12"
+            className="relative h-full max-h-[600px]"
             variants={textVariants}
           >
-            <h2 className="text-3xl md:text-4xl font-light text-[var(--color-soft-black)] mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-              {currentLanguage === 'fr' ? 'Contexte Culturel' :
-               currentLanguage === 'en' ? 'Cultural Context' :
-               'Kontèks Kiltirèl'}
-            </h2>
-            <div className="w-24 h-px bg-gradient-to-r from-transparent via-[var(--color-terracotta)] to-transparent mx-auto"></div>
+            <div
+              className={`absolute inset-0 bg-[#f4ede3] transition-opacity duration-500 ${
+                isImageLoaded ? 'opacity-0' : 'opacity-100'
+              }`}
+            />
+            <img
+              src={artifact.type === 'video' ? artifact.thumbnail : artifact.src}
+              alt={titleText}
+              className={`h-full w-full object-contain transition-all duration-500 ${
+                isImageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+              }`}
+              onLoad={() => setIsImageLoaded(true)}
+            />
+            {artifact.type === 'video' && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="rounded-full bg-black/60 p-4">
+                  <svg className="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+            )}
           </motion.div>
 
-          <motion.p
-            className="text-lg md:text-xl leading-relaxed text-center max-w-3xl mx-auto"
-            variants={textVariants}
-            style={{
-              color: 'var(--color-soft-black)',
-              fontFamily: 'var(--font-body)',
-              opacity: 0.9
-            }}
-          >
-            {artifact.cultural_context[currentLanguage]}
-          </motion.p>
-        </div>
-      </motion.section>
+          <motion.div className="space-y-8" variants={containerVariants}>
+            <motion.div variants={textVariants}>
+              <span
+                className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-xs uppercase tracking-[0.3em] text-[#8b7359]"
+                style={{ fontFamily: 'var(--font-accent)' }}
+              >
+                <span className="h-1 w-1 rounded-full bg-[#CD853F]" aria-hidden="true" />
+                {uiText.story[currentLanguage]}
+              </span>
+              <h1
+                className="mt-4 text-3xl font-semibold leading-tight text-[#2f241a] md:text-4xl"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                {titleText}
+              </h1>
+              <p
+                className="mt-4 text-base leading-relaxed text-[#40352d] md:text-lg"
+                style={{ fontFamily: 'var(--font-body)' }}
+              >
+                {descriptionText}
+              </p>
+            </motion.div>
 
+            {currentAudioPath && (
+              <motion.div
+                className="rounded-3xl border border-[#e5dbcf] bg-white/80 p-5"
+                variants={textVariants}
+              >
+                <audio ref={audioRef} src={currentAudioPath} preload="metadata" style={{ display: 'none' }} />
+                <div className="flex items-start gap-4">
+                  <button
+                    onClick={toggleAudio}
+                    className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#CD853F] text-white transition hover:bg-[#b8682a]"
+                  >
+                    {isPlaying ? (
+                      <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M6 4h4v16H6V4zM14 4h4v16h-4V4z" />
+                      </svg>
+                    ) : (
+                      <svg className="h-7 w-7 translate-x-[1px]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    )}
+                  </button>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col gap-1">
+                        <span
+                          className="text-sm font-medium text-[#3a2f24]"
+                          style={{ fontFamily: 'var(--font-accent)' }}
+                        >
+                          {uiText.listen[currentLanguage]}
+                        </span>
+                        <span className="text-xs uppercase tracking-[0.4em] text-[#95806a]">
+                          {currentLanguage.toUpperCase()}
+                        </span>
+                      </div>
+                      <span className="text-xs text-[#6d5b47]">
+                        {formatTime((audioProgress / 100) * audioDuration)} / {formatTime(audioDuration)}
+                      </span>
+                    </div>
+                    <div className="mt-3">
+                      <div className="relative">
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={audioProgress}
+                          onChange={handleProgressChange}
+                          className="block h-2 w-full appearance-none rounded-full bg-[#e7ded2]"
+                        />
+                        <div
+                          className="pointer-events-none absolute inset-y-0 left-0 rounded-full bg-[#CD853F]"
+                          style={{ width: `${audioProgress}%` }}
+                        />
+                      </div>
+                      <div className="mt-2 flex items-center gap-3 text-xs text-[#6d5b47]">
+                        <span className="flex items-center gap-1">
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                            />
+                          </svg>
+                          {uiText.available[currentLanguage]}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {originText && (
+              <motion.div
+                className="rounded-2xl border border-[#e5dbcf] bg-white/80 px-4 py-3"
+                variants={textVariants}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="rounded-full bg-[#CD853F]/15 p-1.5 text-[#CD853F]">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <span
+                      className="text-xs uppercase tracking-[0.2em] text-[#8b7359]"
+                      style={{ fontFamily: 'var(--font-accent)' }}
+                    >
+                      {uiText.origin[currentLanguage]}
+                    </span>
+                    <p
+                      className="text-sm font-medium text-[#2f241a]"
+                      style={{ fontFamily: 'var(--font-body)' }}
+                    >
+                      {originText}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
+        </div>
+
+        <motion.div
+          className="mt-16 border-t border-[#e5dbcf] pt-6"
+          variants={textVariants}
+        >
+          <div className="flex items-center justify-center gap-4">
+            <button
+              onClick={handlePrev}
+              className="group flex h-12 w-12 items-center justify-center rounded-full border border-[#e5dbcf] bg-white/80 text-[#CD853F] transition hover:border-[#d1c1ad] hover:bg-[#CD853F] hover:text-white"
+            >
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            
+            <span className="text-sm text-[#95806a]" style={{ fontFamily: 'var(--font-accent)' }}>
+              {currentIndex + 1} / {artifacts.length}
+            </span>
+            
+            <button
+              onClick={handleNext}
+              className="group flex h-12 w-12 items-center justify-center rounded-full border border-[#e5dbcf] bg-white/80 text-[#CD853F] transition hover:border-[#d1c1ad] hover:bg-[#CD853F] hover:text-white"
+            >
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </motion.div>
+      </div>
     </motion.div>
   )
 }
