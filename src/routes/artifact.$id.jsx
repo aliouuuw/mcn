@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from '@tanstack/react-router'
+import ShareComponent from '../components/ShareComponent'
 
 // Import real artifacts data
 import artifactsData from '../../artifacts_data.json'
@@ -260,21 +261,29 @@ function ArtifactPage() {
             <span>{uiText.back[currentLanguage]}</span>
           </button>
 
-          <div className="flex w-full flex-wrap items-center gap-2 md:w-auto md:justify-end">
-            {languageOptions.map((lang) => (
-              <button
-                key={lang}
-                onClick={() => handleLanguageChange(lang)}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                  currentLanguage === lang
-                    ? 'bg-[#CD853F] text-white shadow-sm'
-                    : 'border border-transparent bg-white/70 text-[#4a4136] hover:border-[#e5dbcf]'
-                }`}
-                style={{ fontFamily: 'var(--font-accent)' }}
-              >
-                {lang === 'fr' ? 'Français' : lang === 'en' ? 'English' : 'Wolof'}
-              </button>
-            ))}
+          <div className="flex w-full flex-wrap items-center justify-between gap-2 md:w-auto md:justify-end">
+            <div className="flex w-full flex-wrap items-center gap-2 md:w-auto">
+              {languageOptions.map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => handleLanguageChange(lang)}
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                    currentLanguage === lang
+                      ? 'bg-[#CD853F] text-white shadow-sm'
+                      : 'border border-transparent bg-white/70 text-[#4a4136] hover:border-[#e5dbcf]'
+                  }`}
+                  style={{ fontFamily: 'var(--font-accent)' }}
+                >
+                  {lang === 'fr' ? 'Français' : lang === 'en' ? 'English' : 'Wolof'}
+                </button>
+              ))}
+            </div>
+            <ShareComponent
+              artifactId={artifact.id}
+              artifactTitle={titleText}
+              artifactUrl={`${window.location.origin}/artifact/${artifact.id}`}
+              currentLanguage={currentLanguage}
+            />
           </div>
         </motion.header>
 

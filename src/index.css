@@ -1700,6 +1700,9 @@ body {
   backdrop-filter: blur(20px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
   animation: modal-fade-in 0.3s ease-out !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .modal-content {

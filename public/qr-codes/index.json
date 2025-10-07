@@ -1,0 +1,89 @@
+{
+  "generated_at": "2025-10-07T20:35:01.619Z",
+  "base_url": "https://mcn-liart.vercel.app",
+  "total_artifacts": 9,
+  "successful_generations": 9,
+  "qr_codes": [
+    {
+      "artifact_id": "armure-du-chasseur-dogon-mali",
+      "artifact_title": "Armure du chasseur Dogon (Mali)",
+      "artifact_url": "https://mcn-liart.vercel.app/artifact/armure-du-chasseur-dogon-mali",
+      "qr_code_filename": "armure-du-chasseur-dogon-mali.png",
+      "qr_code_path": "/qr-codes/armure-du-chasseur-dogon-mali.png",
+      "generated": true,
+      "error": null
+    },
+    {
+      "artifact_id": "babouches-de-serigne-babacar-sy-senegal",
+      "artifact_title": "Babouches de Serigne Babacar Sy (Sénégal)",
+      "artifact_url": "https://mcn-liart.vercel.app/artifact/babouches-de-serigne-babacar-sy-senegal",
+      "qr_code_filename": "babouches-de-serigne-babacar-sy-senegal.png",
+      "qr_code_path": "/qr-codes/babouches-de-serigne-babacar-sy-senegal.png",
+      "generated": true,
+      "error": null
+    },
+    {
+      "artifact_id": "masque-ndomo-bambara-mali",
+      "artifact_title": "Masque Ndomo (Bambara – Mali)",
+      "artifact_url": "https://mcn-liart.vercel.app/artifact/masque-ndomo-bambara-mali",
+      "qr_code_filename": "masque-ndomo-bambara-mali.png",
+      "qr_code_path": "/qr-codes/masque-ndomo-bambara-mali.png",
+      "generated": true,
+      "error": null
+    },
+    {
+      "artifact_id": "reproduction-du-crane-dhomo-senegalensis-senegal",
+      "artifact_title": "Reproduction du crâne d’Homo Senegalensis (Sénégal)",
+      "artifact_url": "https://mcn-liart.vercel.app/artifact/reproduction-du-crane-dhomo-senegalensis-senegal",
+      "qr_code_filename": "reproduction-du-crane-dhomo-senegalensis-senegal.png",
+      "qr_code_path": "/qr-codes/reproduction-du-crane-dhomo-senegalensis-senegal.png",
+      "generated": true,
+      "error": null
+    },
+    {
+      "artifact_id": "masque-ceremoniel-serere-senegal",
+      "artifact_title": "Masque cérémoniel Sérère (Sénégal)",
+      "artifact_url": "https://mcn-liart.vercel.app/artifact/masque-ceremoniel-serere-senegal",
+      "qr_code_filename": "masque-ceremoniel-serere-senegal.png",
+      "qr_code_path": "/qr-codes/masque-ceremoniel-serere-senegal.png",
+      "generated": true,
+      "error": null
+    },
+    {
+      "artifact_id": "tambour-royal-du-royaume-du-djolof-senegal",
+      "artifact_title": "Tambour royal du Royaume du Djolof (Sénégal)",
+      "artifact_url": "https://mcn-liart.vercel.app/artifact/tambour-royal-du-royaume-du-djolof-senegal",
+      "qr_code_filename": "tambour-royal-du-royaume-du-djolof-senegal.png",
+      "qr_code_path": "/qr-codes/tambour-royal-du-royaume-du-djolof-senegal.png",
+      "generated": true,
+      "error": null
+    },
+    {
+      "artifact_id": "pagne-tisse-lebou-senegal",
+      "artifact_title": "Pagne tissé Lébou (Sénégal)",
+      "artifact_url": "https://mcn-liart.vercel.app/artifact/pagne-tisse-lebou-senegal",
+      "qr_code_filename": "pagne-tisse-lebou-senegal.png",
+      "qr_code_path": "/qr-codes/pagne-tisse-lebou-senegal.png",
+      "generated": true,
+      "error": null
+    },
+    {
+      "artifact_id": "statue-dogon-de-lesprit-protecteur-mali",
+      "artifact_title": "Statue Dogon de l’esprit protecteur (Mali)",
+      "artifact_url": "https://mcn-liart.vercel.app/artifact/statue-dogon-de-lesprit-protecteur-mali",
+      "qr_code_filename": "statue-dogon-de-lesprit-protecteur-mali.png",
+      "qr_code_path": "/qr-codes/statue-dogon-de-lesprit-protecteur-mali.png",
+      "generated": true,
+      "error": null
+    },
+    {
+      "artifact_id": "bracelet-en-or-de-lempire-ashanti-ghana",
+      "artifact_title": "Bracelet en or de l’Empire Ashanti (Ghana)",
+      "artifact_url": "https://mcn-liart.vercel.app/artifact/bracelet-en-or-de-lempire-ashanti-ghana",
+      "qr_code_filename": "bracelet-en-or-de-lempire-ashanti-ghana.png",
+      "qr_code_path": "/qr-codes/bracelet-en-or-de-lempire-ashanti-ghana.png",
+      "generated": true,
+      "error": null
+    }
+  ]
+}
