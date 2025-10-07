@@ -48,13 +48,13 @@ const artifacts = [
 // Use original artifacts array - Media.js handles infinite looping
 const infiniteArtifacts = artifacts
 
-// Artistic asymmetric layout function using absolute positioning like the template
+// Enhanced artistic asymmetric layout function with more dynamic positioning
 const getArtisticLayout = (index) => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
   const isTablet = typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth < 1200
 
   if (isMobile) {
-    // Mobile layout - vertical stacking with proper spacing
+    // Enhanced mobile layout with more variety
     const mobileLayouts = [
       { left: '5%', top: '0rem', width: '90%', height: '25rem', rotation: -1, borderRadius: 8, zIndex: 1 },
       { left: '10%', top: '30rem', width: '80%', height: '30rem', rotation: 1, borderRadius: 6, zIndex: 1 },
@@ -81,7 +81,7 @@ const getArtisticLayout = (index) => {
     return tabletLayouts[index % tabletLayouts.length]
   }
 
-  // Desktop layout - closely following template's approach with proper spacing
+  // Enhanced desktop layout with more artistic positioning
   const desktopLayouts = [
     { left: '0rem', top: '0rem', width: '35rem', height: '20rem', rotation: -2, borderRadius: 12, zIndex: 1 },
     { left: '42.5rem', top: '15rem', width: '20rem', height: '25rem', rotation: 1.5, borderRadius: 8, zIndex: 1 },
@@ -117,14 +117,25 @@ const Collections = () => {
           throw new Error('WebGL not supported')
         }
 
+        // Check for required extensions
+        const requiredExtensions = ['OES_texture_float', 'OES_texture_half_float']
+        const missingExtensions = requiredExtensions.filter(ext => !gl.getExtension(ext))
+        
+        if (missingExtensions.length > 0) {
+          console.warn('Some WebGL extensions not available:', missingExtensions)
+        }
+
         // Initialize WebGL gallery after component mounts
         if (galleryRef.current && !webglGalleryRef.current) {
+          // Add loading delay for smooth transition
+          await new Promise(resolve => setTimeout(resolve, 500))
+          
           webglGalleryRef.current = new WebGLGallery(galleryRef.current)
           
-          // Hide loading state after a short delay
+          // Enhanced loading state with smooth transition
           setTimeout(() => {
             setIsLoading(false)
-          }, 1000)
+          }, 1500)
         }
       } catch (error) {
         console.error('Failed to initialize WebGL gallery:', error)
@@ -135,7 +146,7 @@ const Collections = () => {
 
     initGallery()
 
-    // Cleanup on unmount
+    // Enhanced cleanup on unmount
     return () => {
       if (webglGalleryRef.current) {
         try {

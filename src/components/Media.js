@@ -13,13 +13,46 @@ uniform mat4 projectionMatrix;
 
 uniform float uStrength;
 uniform vec2 uViewportSizes;
+uniform float uTime;
+uniform float uHover;
+uniform vec2 uMouse;
 
 varying vec2 vUv;
+
+// Enhanced parallax displacement function with hover intensification
+vec3 applyParallax(vec3 pos, vec2 uv, float strength, float hover) {
+    // Base parallax based on scroll strength
+    vec2 parallaxOffset = (uv - 0.5) * strength * 0.15;
+
+    // Mouse-driven parallax that intensifies on hover
+    vec2 mouseParallax = (uMouse - 0.5) * strength * hover * 0.08;
+    parallaxOffset += mouseParallax;
+
+    // Add organic wave motion that responds to hover
+    float waveFrequency = mix(1.0, 2.0, hover); // Faster waves on hover
+    float waveAmplitude = mix(0.003, 0.008, hover); // Stronger waves on hover
+    float wave = sin(uTime * 0.001 * waveFrequency + uv.x * PI * 2.0) * waveAmplitude;
+    parallaxOffset.y += wave;
+
+    // Add secondary wave for more organic movement
+    float secondaryWave = cos(uTime * 0.0007 * waveFrequency + uv.y * PI * 1.5) * waveAmplitude * 0.5;
+    parallaxOffset.x += secondaryWave;
+
+    // Add subtle depth displacement on hover
+    float depthOffset = hover * sin(uv.x * PI) * sin(uv.y * PI) * 0.01;
+    parallaxOffset += vec2(depthOffset, depthOffset);
+
+    return pos + vec3(parallaxOffset.x, parallaxOffset.y, 0.0);
+}
 
 void main() {
   vec4 newPosition = modelViewMatrix * vec4(position, 1.0);
 
+  // Apply wave deformation
   newPosition.z += sin(newPosition.y / uViewportSizes.y * PI + PI / 2.0) * -uStrength;
+
+  // Apply enhanced parallax effects
+  newPosition.xyz = applyParallax(newPosition.xyz, uv, uStrength, uHover);
 
   vUv = uv;
 
@@ -31,20 +64,34 @@ const fragmentShader = `precision highp float;
 uniform vec2 uImageSizes;
 uniform vec2 uPlaneSizes;
 uniform sampler2D tMap;
+uniform sampler2D tGrain;
 uniform float uTime;
+uniform float uHover;
 
 varying vec2 vUv;
 
-// Random function for grain effect
+// Random function for procedural grain effect
 float random(vec2 st) {
     return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
 }
 
-// Generate grain texture
-float grain(vec2 uv, float time) {
+// Generate procedural grain texture
+float proceduralGrain(vec2 uv, float time) {
     float noise = random(uv + time);
     noise = random(vec2(noise, time));
-    return noise;
+    return (noise - 0.5) * 2.0; // Normalize to -1 to 1 range
+}
+
+// Sample grain texture or fall back to procedural
+float getGrain(vec2 uv, float time, sampler2D grainTex) {
+    vec4 grainSample = texture2D(grainTex, uv);
+    // If grain texture is loaded (not default white), use it
+    if (grainSample.r != 1.0 || grainSample.g != 1.0 || grainSample.b != 1.0) {
+        return (grainSample.r - 0.5) * 2.0; // Convert to -1 to 1 range
+    } else {
+        // Fall back to procedural grain
+        return proceduralGrain(uv, time);
+    }
 }
 
 void main() {
@@ -59,15 +106,27 @@ void main() {
   );
 
   vec4 color = texture2D(tMap, uv);
-  
+
   // Add subtle vignette effect
   float dist = distance(vUv, vec2(0.5, 0.5));
   float vignette = 1.0 - smoothstep(0.7, 1.2, dist);
   color.rgb *= vignette;
 
-  // Add grain effect
-  float grainAmount = grain(vUv * 2.0, uTime) * 0.03;
-  color.rgb += grainAmount;
+  // Add grain effect that intensifies on hover
+  float grainUvScale = 3.0; // Scale UV for more detailed grain
+  vec2 grainUv = vUv * grainUvScale;
+  float grainAmount = getGrain(grainUv, uTime * 0.1, tGrain);
+
+  // Base grain intensity, increases on hover
+  float baseGrainIntensity = 0.02;
+  float hoverGrainIntensity = 0.08;
+  float grainIntensity = mix(baseGrainIntensity, hoverGrainIntensity, uHover);
+
+  // Apply grain as overlay blend mode
+  color.rgb = mix(color.rgb, color.rgb + grainAmount * grainIntensity, 0.7);
+
+  // Add subtle brightness boost on hover
+  color.rgb *= (1.0 + uHover * 0.1);
 
   gl_FragColor = color;
 }`
@@ -97,6 +156,25 @@ export default class Media {
       generateMipmaps: false
     })
 
+    // Load grain texture for enhanced visual effects
+    const grainTexture = new Texture(this.gl, {
+      generateMipmaps: false
+    })
+    const grainImage = new Image()
+    grainImage.crossOrigin = 'anonymous'
+    grainImage.onload = () => {
+      grainTexture.image = grainImage
+      // Ensure texture is updated when image loads
+      if (program.uniforms.tGrain) {
+        program.uniforms.tGrain.value = grainTexture
+      }
+    }
+    grainImage.onerror = () => {
+      console.warn('Grain texture failed to load, using procedural grain')
+      // Keep default white texture for procedural fallback
+    }
+    grainImage.src = '/images/grain.png'
+
     image.src = this.image.src
     image.onload = () => {
       program.uniforms.uImageSizes.value = [image.naturalWidth, image.naturalHeight]
@@ -108,11 +186,14 @@ export default class Media {
       vertex: vertexShader,
       uniforms: {
         tMap: { value: texture },
+        tGrain: { value: grainTexture },
         uPlaneSizes: { value: [0, 0] },
         uImageSizes: { value: [0, 0] },
         uViewportSizes: { value: [this.viewport.width, this.viewport.height] },
         uStrength: { value: 0 },
-        uTime: { value: 0 }
+        uTime: { value: 0 },
+        uHover: { value: 0 },
+        uMouse: { value: [0.5, 0.5] }
       },
       transparent: true
     })
@@ -173,11 +254,19 @@ export default class Media {
       this.isAfter = false
     }
 
-    // Calculate dynamic strength based on scroll velocity
+    // Enhanced dynamic strength calculation based on scroll velocity
     const scrollVelocity = Math.abs(y.current - y.last) / this.screen.width
-    this.plane.program.uniforms.uStrength.value = scrollVelocity * 10
+    const baseStrength = scrollVelocity * 15 // Increased base strength
     
-    // Update time uniform for potential animations
+    // Add momentum-based strength for more dramatic effects
+    const momentum = Math.min(scrollVelocity * 2, 1.0)
+    const enhancedStrength = baseStrength + (momentum * 5)
+    
+    // Apply strength with smooth interpolation
+    const targetStrength = Math.min(enhancedStrength, 2.0) // Cap maximum strength
+    this.plane.program.uniforms.uStrength.value = targetStrength
+    
+    // Update time uniform for animations
     this.plane.program.uniforms.uTime.value = performance.now() * 0.001
   }
 
