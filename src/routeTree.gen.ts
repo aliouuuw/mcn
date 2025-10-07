@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as CollectionsRouteImport } from './routes/collections'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ArtifactIdRouteImport } from './routes/artifact.$id'
 
 const CollectionsRoute = CollectionsRouteImport.update({
   id: '/collections',
@@ -22,31 +23,40 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ArtifactIdRoute = ArtifactIdRouteImport.update({
+  id: '/artifact/$id',
+  path: '/artifact/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/collections': typeof CollectionsRoute
+  '/artifact/$id': typeof ArtifactIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/collections': typeof CollectionsRoute
+  '/artifact/$id': typeof ArtifactIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/collections': typeof CollectionsRoute
+  '/artifact/$id': typeof ArtifactIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/collections'
+  fullPaths: '/' | '/collections' | '/artifact/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/collections'
-  id: '__root__' | '/' | '/collections'
+  to: '/' | '/collections' | '/artifact/$id'
+  id: '__root__' | '/' | '/collections' | '/artifact/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CollectionsRoute: typeof CollectionsRoute
+  ArtifactIdRoute: typeof ArtifactIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/artifact/$id': {
+      id: '/artifact/$id'
+      path: '/artifact/$id'
+      fullPath: '/artifact/$id'
+      preLoaderRoute: typeof ArtifactIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CollectionsRoute: CollectionsRoute,
+  ArtifactIdRoute: ArtifactIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

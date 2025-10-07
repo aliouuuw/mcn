@@ -1430,10 +1430,117 @@ body {
   .gallery-item {
     border: 2px solid #000;
   }
-  
+
   .gallery-item:hover {
     border-color: #fff;
   }
+}
+
+/* Artifact Page Background Overlay */
+.artifact-bg-overlay {
+  position: absolute;
+  inset: -14vh -18vw;
+  width: calc(100% + 36vw);
+  height: calc(100% + 28vh);
+  z-index: 0;
+  background-image: url("/mcn-2.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: scale(1.02) translateZ(0);
+  filter: grayscale(1) contrast(0.9) brightness(0.94);
+  pointer-events: none;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  opacity: 0.3;
+}
+
+.artifact-bg-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(251, 249, 247, 0.8) 0%,
+      rgba(248, 240, 230, 0.9) 54%,
+      rgba(245, 235, 220, 0.95) 78%,
+      rgba(243, 230, 210, 0.98) 100%);
+  backdrop-filter: blur(32px) saturate(130%);
+  opacity: 0.95;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.artifact-bg-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  z-index: 2;
+  border-radius: 42%;
+  border: 1px solid rgba(240, 225, 200, 0.38);
+  box-shadow:
+    0 0 70px rgba(235, 215, 185, 0.5),
+    inset 0 0 35px rgba(230, 210, 175, 0.28);
+  filter: blur(18px);
+  opacity: 0.48;
+  transform: scale(1.02) rotate(-0.6deg);
+  animation: artifact-overlay-glint 32s ease-in-out infinite;
+}
+
+@keyframes artifact-overlay-glint {
+  0%, 100% {
+    transform: scale(1.02) rotate(-0.6deg);
+    opacity: 0.48;
+  }
+  50% {
+    transform: scale(1.04) rotate(0.6deg);
+    opacity: 0.58;
+  }
+}
+
+/* Audio Player Slider Styles */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-terracotta);
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-terracotta);
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Dark Mode Support */
@@ -1441,13 +1548,102 @@ body {
   .collections-root {
     background-color: #1a1a1a;
   }
-  
+
   .loading-screen {
     background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
   }
-  
+
   .header {
     color: #fff;
+  }
+}
+
+/* Enhanced Modal Styles - Highest Z-Index */
+.modal-backdrop {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 999999 !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  animation: modal-fade-in 0.3s ease-out !important;
+}
+
+.modal-content {
+  position: relative !important;
+  z-index: 1000000 !important;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 0 100px rgba(0, 0, 0, 0.3) !important;
+  animation: modal-zoom-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
+}
+
+@keyframes modal-zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Ensure modal is above everything */
+.modal-backdrop::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.8) 100%);
+  z-index: -1;
+}
+
+/* Hide scrollbar when modal is open */
+body.modal-open {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Enhanced backdrop blur for better browser support */
+@supports not (backdrop-filter: blur(20px)) {
+  .modal-backdrop {
+    background: rgba(0, 0, 0, 0.9) !important;
+  }
+  
+  .modal-backdrop::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 30% 30%, rgba(0, 0, 0, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 70% 70%, rgba(0, 0, 0, 0.1) 0%, transparent 50%),
+      linear-gradient(45deg, rgba(0, 0, 0, 0.05) 0%, transparent 100%);
+    filter: blur(10px);
   }
 }
 

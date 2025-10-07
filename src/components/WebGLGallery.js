@@ -15,6 +15,7 @@ export default class WebGLGallery {
     this.speed = 2
     this.isDestroyed = false
     this.animationId = null
+    this.isPaused = false
 
     this.createRenderer()
     this.createCamera()
@@ -47,7 +48,7 @@ export default class WebGLGallery {
     this.gl.canvas.style.width = '100%'
     this.gl.canvas.style.height = '100%'
     this.gl.canvas.style.zIndex = '1'
-    this.gl.canvas.style.pointerEvents = 'none'
+    this.gl.canvas.style.pointerEvents = 'auto'
     
     // Store reference to canvas for proper cleanup
     this.canvas = this.gl.canvas
@@ -86,33 +87,54 @@ export default class WebGLGallery {
       return media
     })
 
-    // Add mouse tracking for hover effects
+    // Add mouse tracking for hover effects and click detection
     this.mouse = { x: 0.5, y: 0.5 }
     this.hoveredMedia = null
+    this.clickedMedia = null
 
     this.onMouseMove = this.onMouseMove.bind(this)
     this.onMouseEnter = this.onMouseEnter.bind(this)
     this.onMouseLeave = this.onMouseLeave.bind(this)
+    this.onClick = this.onClick.bind(this)
   }
 
   onTouchDown(event) {
     this.isDown = true
+    this.isDragging = false
+    this.dragThreshold = 5 // pixels
 
     this.scroll.position = this.scroll.current
     this.start = event.touches ? event.touches[0].clientY : event.clientY
+    this.startX = event.touches ? event.touches[0].clientX : event.clientX
+    this.startY = event.touches ? event.touches[0].clientY : event.clientY
   }
 
   onTouchMove(event) {
     if (!this.isDown) return
 
+    const x = event.touches ? event.touches[0].clientX : event.clientX
     const y = event.touches ? event.touches[0].clientY : event.clientY
-    const distance = (this.start - y) * 2
+    
+    // Check if we've moved enough to consider this a drag
+    const deltaX = Math.abs(x - this.startX)
+    const deltaY = Math.abs(y - this.startY)
+    
+    if (deltaX > this.dragThreshold || deltaY > this.dragThreshold) {
+      this.isDragging = true
+    }
 
+    const distance = (this.start - y) * 2
     this.scroll.target = this.scroll.position + distance
   }
 
-  onTouchUp() {
+  onTouchUp(event) {
+    // If we weren't dragging, treat this as a potential click
+    if (this.isDown && !this.isDragging) {
+      this.onClick(event)
+    }
+    
     this.isDown = false
+    this.isDragging = false
   }
 
   onWheel(event) {
@@ -156,7 +178,7 @@ export default class WebGLGallery {
   }
 
   update() {
-    if (this.isDestroyed) return
+    if (this.isDestroyed || this.isPaused) return
 
     this.scroll.target += this.speed
 
@@ -182,6 +204,14 @@ export default class WebGLGallery {
     this.scroll.last = this.scroll.current
 
     this.animationId = window.requestAnimationFrame(this.update.bind(this))
+  }
+
+  pause() {
+    this.isPaused = true
+  }
+
+  resume() {
+    this.isPaused = false
   }
 
   onMouseMove(event) {
@@ -224,6 +254,9 @@ export default class WebGLGallery {
 
           // Increase z-index for layering
           this.hoveredMedia.element.style.zIndex = '15'
+          
+          // Add cursor pointer to indicate clickability
+          this.hoveredMedia.element.style.cursor = 'pointer'
         }
       }
     }
@@ -245,9 +278,86 @@ export default class WebGLGallery {
 
       // Reset z-index
       this.hoveredMedia.element.style.zIndex = ''
+      
+      // Reset cursor
+      this.hoveredMedia.element.style.cursor = ''
 
       this.hoveredMedia = null
     }
+  }
+
+  onClick(event) {
+    // Prevent default to avoid any unwanted behaviors
+    event.preventDefault()
+    event.stopPropagation()
+
+    // Get click coordinates
+    const rect = this.gl.canvas.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
+
+    // Convert to normalized coordinates
+    const normalizedX = x / rect.width
+    const normalizedY = 1.0 - (y / rect.height) // Flip Y coordinate
+
+    // Find which media element was clicked
+    const clickedMedia = this.getMediaAtPosition(normalizedX, normalizedY)
+    
+    if (clickedMedia) {
+      this.showArtifactDetails(clickedMedia)
+    }
+  }
+
+  getMediaAtPosition(x, y) {
+    if (!this.medias) return null
+
+    // Convert normalized coordinates to viewport coordinates
+    const viewportX = (x - 0.5) * this.viewport.width
+    const viewportY = (y - 0.5) * this.viewport.height
+
+    // Check each media element to see if the click is within its bounds
+    for (let i = 0; i < this.medias.length; i++) {
+      const media = this.medias[i]
+      if (!media.plane) continue
+
+      const plane = media.plane
+      const halfWidth = plane.scale.x / 2
+      const halfHeight = plane.scale.y / 2
+
+      // Check if click is within the plane bounds
+      if (viewportX >= plane.position.x - halfWidth &&
+          viewportX <= plane.position.x + halfWidth &&
+          viewportY >= plane.position.y - halfHeight &&
+          viewportY <= plane.position.y + halfHeight) {
+        return media
+      }
+    }
+
+    return null
+  }
+
+  showArtifactDetails(media) {
+    if (!media || !media.element) return
+
+    // Get artifact data from the element
+    const img = media.element.querySelector('img')
+    if (!img) return
+
+    // Find the artifact data from the original artifacts array
+    const artifactIndex = Array.from(this.mediasElements).indexOf(media.element)
+    
+    // Dispatch custom event with artifact details
+    const artifactClickEvent = new CustomEvent('artifactClick', {
+      detail: {
+        index: artifactIndex,
+        element: media.element,
+        image: img,
+        media: media
+      }
+    })
+
+    // Dispatch the event on the gallery element so Collections can listen
+    this.gallery.dispatchEvent(artifactClickEvent)
   }
 
   addEventListeners() {
@@ -264,10 +374,11 @@ export default class WebGLGallery {
     window.addEventListener('touchmove', this.onTouchMove.bind(this))
     window.addEventListener('touchend', this.onTouchUp.bind(this))
 
-    // Add mouse tracking for enhanced visual effects
+    // Add mouse tracking for enhanced visual effects and click detection
     this.gl.canvas.addEventListener('mousemove', this.onMouseMove)
     this.gl.canvas.addEventListener('mouseenter', this.onMouseEnter)
     this.gl.canvas.addEventListener('mouseleave', this.onMouseLeave)
+    this.gl.canvas.addEventListener('click', this.onClick)
   }
 
   destroy() {
@@ -299,6 +410,7 @@ export default class WebGLGallery {
         this.canvas.removeEventListener('mousemove', this.onMouseMove)
         this.canvas.removeEventListener('mouseenter', this.onMouseEnter)
         this.canvas.removeEventListener('mouseleave', this.onMouseLeave)
+        this.canvas.removeEventListener('click', this.onClick)
       }
     }
 
