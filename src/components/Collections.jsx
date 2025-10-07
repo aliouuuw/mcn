@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
-import Lenis from 'lenis'
+import WebGLGallery from './WebGLGallery.js'
 
 const artifacts = [
   {
@@ -45,150 +45,113 @@ const artifacts = [
   },
 ]
 
-// Single artifact component
-function ArtifactItem({ artifact, index, scrollY }) {
-  const ref = useRef()
-  
-  // Calculate parallax offset
-  const parallaxOffset = scrollY * 0.1 * (index % 2 === 0 ? 1 : -1)
-  
-  // Calculate opacity based on scroll position
-  const itemTop = index * 600 // Approximate item height
-  const viewportHeight = window.innerHeight
-  const distanceFromCenter = Math.abs((scrollY + viewportHeight / 2) - (itemTop + 300))
-  const maxDistance = viewportHeight
-  const opacity = Math.max(0.3, 1 - (distanceFromCenter / maxDistance))
-  
-  // Random horizontal offset for staggered layout
-  const xOffset = index % 2 === 0 ? '10%' : '-10%'
-  
-  return (
-    <div
-      ref={ref}
-      className="relative flex justify-center items-center mb-32"
-      style={{
-        transform: `translateX(${xOffset}) translateY(${parallaxOffset}px)`,
-        opacity: opacity,
-        transition: 'opacity 0.3s ease-out'
-      }}
-    >
-      <div className="relative group">
-        <img
-          src={artifact.type === 'video' ? artifact.thumbnail : artifact.src}
-          alt={artifact.titles?.en || 'Artifact'}
-          className="max-w-md max-h-96 object-contain shadow-lg transition-transform duration-700 ease-out group-hover:scale-105"
-          style={{
-            filter: `brightness(${0.9 + opacity * 0.1})`,
-          }}
-        />
-        
-        {/* Video indicator */}
-        {artifact.type === 'video' && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-16 h-16 bg-black/30 rounded-full flex items-center justify-center backdrop-blur-sm">
-              <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
+// Use original artifacts array - Media.js handles infinite looping
+const infiniteArtifacts = artifacts
 
-// Main Collections component
 const Collections = () => {
-  const [scrollY, setScrollY] = useState(0)
-  const containerRef = useRef()
-  const lenisRef = useRef()
-  
-  // Create multiple copies for infinite scroll effect
-  const infiniteArtifacts = [
-    ...artifacts,
-    ...artifacts,
-    ...artifacts,
-    ...artifacts,
-    ...artifacts,
-    ...artifacts
-  ]
-  
+  const galleryRef = useRef()
+  const webglGalleryRef = useRef()
+  const [isLoading, setIsLoading] = useState(true)
+
   useEffect(() => {
-    // Initialize Lenis for smooth scrolling
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-      infinite: false,
-    })
-    
-    lenisRef.current = lenis
-    
-    // Update scroll position
-    lenis.on('scroll', ({ scroll }) => {
-      setScrollY(scroll)
+    // Initialize WebGL gallery after component mounts
+    if (galleryRef.current && !webglGalleryRef.current) {
+      webglGalleryRef.current = new WebGLGallery(galleryRef.current)
       
-      // Infinite scroll logic - reset when reaching bottom
-      const maxScroll = containerRef.current?.scrollHeight - window.innerHeight
-      if (scroll > maxScroll * 0.8) {
-        // Smoothly reset to beginning
-        lenis.scrollTo(0, { immediate: false, duration: 2 })
-      }
-    })
-    
-    function raf(time) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
+      // Hide loading state after a short delay
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 1000)
     }
-    
-    requestAnimationFrame(raf)
-    
+
+    // Cleanup on unmount
     return () => {
-      lenis.destroy()
+      if (webglGalleryRef.current) {
+        webglGalleryRef.current.destroy()
+        webglGalleryRef.current = null
+      }
     }
   }, [])
-  
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Content container */}
+    <div className="collections-root min-h-screen relative overflow-hidden">
+      {/* Background overlay */}
+      <div className="collections-overlay-smooth" style={{ zIndex: 2 }} aria-hidden="true" />
+
+      {/* Loading screen */}
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#f4f4f0]">
+          <div className="text-[#2f2f2f] text-xl font-light tracking-wider">Loading Gallery...</div>
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="fixed top-0 left-0 right-0 z-20 p-8 pointer-events-none">
+        <h1 className="text-[#1a1a1a] text-4xl font-light tracking-wider text-center">
+          Musée des Civilisations Noires
+        </h1>
+        <p className="text-[#2f2f2f]/70 text-center mt-2">
+          Infinite Gallery Experience
+        </p>
+      </div>
+
+      {/* Hidden gallery container for WebGL to reference */}
       <div 
-        ref={containerRef}
-        className="relative"
-        style={{ height: `${infiniteArtifacts.length * 600}px` }}
+        ref={galleryRef}
+        className="gallery-container"
+        style={{ 
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: `${artifacts.length * 450}px`, // Height for WebGL calculations
+          visibility: 'hidden',
+          pointerEvents: 'none'
+        }}
       >
-        {/* Artifacts */}
-        <div className="relative z-10 pt-20 pb-20">
-          {infiniteArtifacts.map((artifact, index) => (
-            <ArtifactItem
+        {infiniteArtifacts.map((artifact, index) => {
+          // Create regular 2-column grid layout
+          const isLeftColumn = index % 2 === 0
+          const rowIndex = Math.floor(index / 2)
+          
+          return (
+            <div 
               key={`${artifact.src}-${index}`}
-              artifact={artifact}
-              index={index}
-              scrollY={scrollY}
-            />
-          ))}
+              className="gallery-item"
+              style={{
+                position: 'absolute',
+                top: `${rowIndex * 450}px`,
+                left: isLeftColumn ? '10%' : '55%',
+                width: '35%',
+                height: '400px'
+              }}
+            >
+              <img 
+                src={artifact.type === 'video' ? artifact.thumbnail : artifact.src}
+                alt={artifact.titles?.en || 'Artifact'}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover'
+                }}
+              />
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Instructions overlay */}
+      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20 pointer-events-none">
+        <div className="text-[#2f2f2f]/50 text-sm text-center">
+          <p>Scroll to explore • Auto-scrolling enabled</p>
+          <p className="text-xs mt-1">WebGL Infinite Gallery</p>
         </div>
       </div>
-      
-      {/* Subtle gradient overlays */}
-      <div className="fixed inset-0 pointer-events-none z-20">
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-white via-white/80 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent" />
-      </div>
-      
-      {/* Scroll indicator */}
-      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-        <div className="w-1 h-16 bg-gray-200 rounded-full overflow-hidden">
-          <div 
-            className="w-full bg-gray-400 rounded-full transition-all duration-300 ease-out"
-            style={{ 
-              height: `${Math.min(100, (scrollY / (containerRef.current?.scrollHeight - window.innerHeight || 1)) * 100)}%` 
-            }}
-          />
-        </div>
+
+      {/* Gradient overlays for depth */}
+      <div className="fixed inset-0 pointer-events-none z-10">
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#f4f4f0] via-[#f4f4f0]/50 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#f4f4f0] via-[#f4f4f0]/50 to-transparent" />
       </div>
     </div>
   )
