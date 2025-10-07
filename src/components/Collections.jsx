@@ -48,67 +48,55 @@ const artifacts = [
 // Use original artifacts array - Media.js handles infinite looping
 const infiniteArtifacts = artifacts
 
-// Artistic asymmetric layout function inspired by template
+// Artistic asymmetric layout function using CSS Grid with proper spacing
 const getArtisticLayout = (index) => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
   const isTablet = typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth < 1200
-  
+
   if (isMobile) {
-    // Mobile layout - simpler, more vertical, ensure full visibility
+    // Mobile layout - single column grid with generous spacing
     const mobileLayouts = [
-      { top: 0, left: 5, width: 85, height: 280, rotation: -1, borderRadius: 8 },
-      { top: 300, left: 8, width: 82, height: 260, rotation: 1, borderRadius: 6 },
-      { top: 580, left: 3, width: 88, height: 270, rotation: -0.5, borderRadius: 7 },
-      { top: 870, left: 6, width: 84, height: 250, rotation: 0.8, borderRadius: 6 },
-      { top: 1140, left: 4, width: 86, height: 290, rotation: -1.2, borderRadius: 8 },
-      { top: 1450, left: 7, width: 83, height: 265, rotation: 1.1, borderRadius: 7 }
+      { gridColumn: '1 / -1', gridRow: 'auto', rotation: -1, borderRadius: 8, zIndex: 1, shadow: '0 4px 20px rgba(0,0,0,0.1)' },
+      { gridColumn: '1 / -1', gridRow: 'auto', rotation: 1, borderRadius: 6, zIndex: 1, shadow: '0 3px 15px rgba(0,0,0,0.08)' },
+      { gridColumn: '1 / -1', gridRow: 'auto', rotation: -0.5, borderRadius: 7, zIndex: 1, shadow: '0 2px 12px rgba(0,0,0,0.06)' },
+      { gridColumn: '1 / -1', gridRow: 'auto', rotation: 0.8, borderRadius: 6, zIndex: 1, shadow: '0 2px 10px rgba(0,0,0,0.05)' },
+      { gridColumn: '1 / -1', gridRow: 'auto', rotation: -1.2, borderRadius: 8, zIndex: 1, shadow: '0 1px 8px rgba(0,0,0,0.04)' },
+      { gridColumn: '1 / -1', gridRow: 'auto', rotation: 1.1, borderRadius: 7, zIndex: 1, shadow: '0 1px 6px rgba(0,0,0,0.03)' }
     ]
     return mobileLayouts[index % mobileLayouts.length]
   }
-  
+
   if (isTablet) {
-    // Tablet layout - medium complexity, ensure full visibility
+    // Tablet layout - 2 column grid with generous spacing
     const tabletLayouts = [
-      { top: 0, left: 5, width: 42, height: 380, rotation: -1.5, borderRadius: 10 },
-      { top: 20, left: 50, width: 38, height: 340, rotation: 1.2, borderRadius: 8 },
-      { top: 400, left: 6, width: 40, height: 360, rotation: -1, borderRadius: 9 },
-      { top: 420, left: 52, width: 36, height: 320, rotation: 1.8, borderRadius: 7 },
-      { top: 780, left: 4, width: 42, height: 390, rotation: -1.3, borderRadius: 11 },
-      { top: 800, left: 48, width: 39, height: 350, rotation: 1.5, borderRadius: 8 },
-      { top: 1200, left: 5, width: 41, height: 370, rotation: -1.1, borderRadius: 10 },
-      { top: 1220, left: 51, width: 37, height: 330, rotation: 1.6, borderRadius: 8 }
+      { gridColumn: index % 2 === 0 ? '1 / 2' : '2 / 3', gridRow: 'auto', rotation: -1.5, borderRadius: 10, zIndex: 1, shadow: '0 6px 25px rgba(0,0,0,0.12)' },
+      { gridColumn: index % 2 === 0 ? '2 / 3' : '1 / 2', gridRow: 'auto', rotation: 1.2, borderRadius: 8, zIndex: 1, shadow: '0 5px 20px rgba(0,0,0,0.1)' },
+      { gridColumn: index % 2 === 0 ? '1 / 2' : '2 / 3', gridRow: 'auto', rotation: -1, borderRadius: 9, zIndex: 1, shadow: '0 4px 18px rgba(0,0,0,0.08)' },
+      { gridColumn: index % 2 === 0 ? '2 / 3' : '1 / 2', gridRow: 'auto', rotation: 1.8, borderRadius: 7, zIndex: 1, shadow: '0 3px 15px rgba(0,0,0,0.06)' },
+      { gridColumn: index % 2 === 0 ? '1 / 2' : '2 / 3', gridRow: 'auto', rotation: -1.3, borderRadius: 11, zIndex: 1, shadow: '0 3px 12px rgba(0,0,0,0.05)' },
+      { gridColumn: index % 2 === 0 ? '2 / 3' : '1 / 2', gridRow: 'auto', rotation: 1.5, borderRadius: 8, zIndex: 1, shadow: '0 2px 10px rgba(0,0,0,0.04)' },
+      { gridColumn: index % 2 === 0 ? '1 / 2' : '2 / 3', gridRow: 'auto', rotation: -1.1, borderRadius: 10, zIndex: 1, shadow: '0 2px 8px rgba(0,0,0,0.03)' },
+      { gridColumn: index % 2 === 0 ? '2 / 3' : '1 / 2', gridRow: 'auto', rotation: 1.6, borderRadius: 8, zIndex: 1, shadow: '0 1px 6px rgba(0,0,0,0.02)' }
     ]
     return tabletLayouts[index % tabletLayouts.length]
   }
-  
-  // Desktop layout - full artistic complexity, ensure full visibility
+
+  // Desktop layout - 3 column grid with generous spacing
   const desktopLayouts = [
-    // Artifact 1 - Large left panel
-    { top: 0, left: 5, width: 38, height: 450, rotation: -2, borderRadius: 12 },
-    // Artifact 2 - Medium right panel
-    { top: 30, left: 48, width: 33, height: 380, rotation: 1.5, borderRadius: 8 },
-    // Artifact 3 - Medium left panel, offset
-    { top: 480, left: 6, width: 36, height: 420, rotation: -1, borderRadius: 10 },
-    // Artifact 4 - Small right panel, higher
-    { top: 100, left: 75, width: 26, height: 320, rotation: 2.5, borderRadius: 6 },
-    // Artifact 5 - Large right panel
-    { top: 450, left: 50, width: 40, height: 480, rotation: -1.5, borderRadius: 14 },
-    // Artifact 6 - Medium left panel, lower
-    { top: 920, left: 4, width: 34, height: 400, rotation: 1, borderRadius: 9 },
-    // Artifact 7 - Large right panel, offset
-    { top: 950, left: 45, width: 43, height: 460, rotation: -2.5, borderRadius: 16 },
-    // Artifact 8 - Small right panel, middle
-    { top: 520, left: 72, width: 28, height: 350, rotation: 1.8, borderRadius: 7 },
-    // Artifact 9 - Medium left panel, spaced
-    { top: 1350, left: 7, width: 37, height: 410, rotation: -1.2, borderRadius: 11 },
-    // Artifact 10 - Small right panel, upper
-    { top: 1430, left: 68, width: 30, height: 340, rotation: 2.2, borderRadius: 8 },
-    // Artifact 11 - Extra large right panel
-    { top: 1420, left: 47, width: 46, height: 520, rotation: -1.8, borderRadius: 18 },
-    // Artifact 12 - Medium left panel, final
-    { top: 1780, left: 5, width: 35, height: 390, rotation: 1.3, borderRadius: 10 }
+    { gridColumn: '1 / 2', gridRow: 'auto', rotation: -2, borderRadius: 12, zIndex: 1, shadow: '0 4px 20px rgba(0,0,0,0.1)' },
+    { gridColumn: '2 / 3', gridRow: 'auto', rotation: 1.5, borderRadius: 8, zIndex: 1, shadow: '0 3px 15px rgba(0,0,0,0.08)' },
+    { gridColumn: '3 / 4', gridRow: 'auto', rotation: -1, borderRadius: 10, zIndex: 1, shadow: '0 2px 12px rgba(0,0,0,0.06)' },
+    { gridColumn: '1 / 3', gridRow: 'auto', rotation: 2.5, borderRadius: 6, zIndex: 1, shadow: '0 2px 10px rgba(0,0,0,0.05)' },
+    { gridColumn: '2 / 4', gridRow: 'auto', rotation: -1.5, borderRadius: 14, zIndex: 1, shadow: '0 1px 8px rgba(0,0,0,0.04)' },
+    { gridColumn: '1 / 2', gridRow: 'auto', rotation: 1, borderRadius: 9, zIndex: 1, shadow: '0 1px 6px rgba(0,0,0,0.03)' },
+    { gridColumn: '3 / 4', gridRow: 'auto', rotation: -2.5, borderRadius: 16, zIndex: 1, shadow: '0 1px 4px rgba(0,0,0,0.02)' },
+    { gridColumn: '2 / 3', gridRow: 'auto', rotation: 1.8, borderRadius: 7, zIndex: 1, shadow: '0 1px 3px rgba(0,0,0,0.01)' },
+    { gridColumn: '1 / 3', gridRow: 'auto', rotation: -1.2, borderRadius: 11, zIndex: 1, shadow: '0 1px 2px rgba(0,0,0,0.01)' },
+    { gridColumn: '3 / 4', gridRow: 'auto', rotation: 2.2, borderRadius: 8, zIndex: 1, shadow: '0 1px 2px rgba(0,0,0,0.01)' },
+    { gridColumn: '2 / 4', gridRow: 'auto', rotation: -1.8, borderRadius: 18, zIndex: 1, shadow: '0 1px 2px rgba(0,0,0,0.01)' },
+    { gridColumn: '1 / 2', gridRow: 'auto', rotation: 1.3, borderRadius: 10, zIndex: 1, shadow: '0 1px 2px rgba(0,0,0,0.01)' }
   ]
-  
+
   return desktopLayouts[index % desktopLayouts.length]
 }
 
@@ -207,39 +195,47 @@ const Collections = () => {
         </p>
       </div>
 
-      {/* Hidden gallery container for WebGL to reference */}
-      <div 
+      {/* Hidden gallery container for WebGL to reference - CSS Grid with generous spacing */}
+      <div
         ref={galleryRef}
         className="gallery-container"
-        style={{ 
+        style={{
           position: 'absolute',
           top: '0',
           left: '0',
           width: '100%',
-          height: '2200px', // Increased height for artistic layout
+          height: '3000px', // Generous height for grid layout
           visibility: 'hidden',
-          pointerEvents: 'none'
+          pointerEvents: 'none',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gridAutoRows: 'minmax(200px, auto)',
+          gap: '40px', // Generous spacing between grid items
+          padding: '40px'
         }}
       >
         {infiniteArtifacts.map((artifact, index) => {
-          // Artistic asymmetric layout inspired by template
+          // Artistic asymmetric layout with CSS Grid and generous spacing
           const layout = getArtisticLayout(index)
-          
+
           return (
-            <div 
+            <div
               key={`${artifact.src}-${index}`}
               className="gallery-item"
               style={{
-                position: 'absolute',
-                top: `${layout.top}px`,
-                left: `${layout.left}%`,
-                width: `${layout.width}%`,
-                height: `${layout.height}px`,
+                gridColumn: layout.gridColumn,
+                gridRow: layout.gridRow,
                 transform: `rotate(${layout.rotation}deg)`,
-                borderRadius: `${layout.borderRadius}px`
+                borderRadius: `${layout.borderRadius}px`,
+                zIndex: layout.zIndex || 1,
+                boxShadow: layout.shadow || 'none',
+                transition: 'all 0.3s ease-out',
+                width: '100%',
+                height: '100%',
+                position: 'relative'
               }}
             >
-              <img 
+              <img
                 src={artifact.type === 'video' ? artifact.thumbnail : artifact.src}
                 alt={artifact.titles?.en || 'Artifact'}
                 style={{
