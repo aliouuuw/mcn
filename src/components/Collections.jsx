@@ -10,53 +10,54 @@ const artifacts = artifactsData
 // Use original artifacts array - Media.js handles infinite looping
 const infiniteArtifacts = artifacts
 
-// Enhanced artistic asymmetric layout function with more dynamic positioning
+// Enhanced artistic asymmetric layout function with seamless infinite scroll
 const getArtisticLayout = (index) => {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
   const isTablet = typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth < 1200
 
   if (isMobile) {
-    // Enhanced mobile layout with more variety
+    // Optimized mobile layout with reduced spacing for seamless scroll
     const mobileLayouts = [
       { left: '5%', top: '0rem', width: '90%', height: '25rem', rotation: -1, borderRadius: 8, zIndex: 1 },
-      { left: '10%', top: '30rem', width: '80%', height: '30rem', rotation: 1, borderRadius: 6, zIndex: 1 },
-      { left: '0%', top: '65rem', width: '85%', height: '28rem', rotation: -0.5, borderRadius: 7, zIndex: 1 },
-      { right: '5%', top: '98rem', width: '75%', height: '26rem', rotation: 0.8, borderRadius: 6, zIndex: 1 },
-      { left: '8%', top: '129rem', width: '82%', height: '32rem', rotation: -1.2, borderRadius: 8, zIndex: 1 },
-      { right: '3%', top: '166rem', width: '88%', height: '29rem', rotation: 1.1, borderRadius: 7, zIndex: 1 }
+      { left: '10%', top: '28rem', width: '80%', height: '30rem', rotation: 1, borderRadius: 6, zIndex: 1 },
+      { left: '0%', top: '60rem', width: '85%', height: '28rem', rotation: -0.5, borderRadius: 7, zIndex: 1 },
+      { right: '5%', top: '90rem', width: '75%', height: '26rem', rotation: 0.8, borderRadius: 6, zIndex: 1 },
+      { left: '8%', top: '118rem', width: '82%', height: '32rem', rotation: -1.2, borderRadius: 8, zIndex: 1 },
+      { right: '3%', top: '152rem', width: '88%', height: '29rem', rotation: 1.1, borderRadius: 7, zIndex: 1 },
+      { left: '12%', top: '183rem', width: '76%', height: '27rem', rotation: -0.8, borderRadius: 9, zIndex: 1 },
+      { right: '8%', top: '212rem', width: '84%', height: '31rem', rotation: 1.3, borderRadius: 6, zIndex: 1 },
+      { left: '6%', top: '245rem', width: '88%', height: '28rem', rotation: -1.1, borderRadius: 8, zIndex: 1 }
     ]
     return mobileLayouts[index % mobileLayouts.length]
   }
 
   if (isTablet) {
-    // Tablet layout - inspired by template but adapted for tablet
+    // Optimized tablet layout with reduced spacing for seamless scroll
     const tabletLayouts = [
       { left: '5%', top: '0rem', width: '45%', height: '35rem', rotation: -1.5, borderRadius: 10, zIndex: 1 },
-      { right: '5%', top: '15rem', width: '40%', height: '40rem', rotation: 1.2, borderRadius: 8, zIndex: 1 },
-      { left: '10%', top: '45rem', width: '50%', height: '38rem', rotation: -1, borderRadius: 9, zIndex: 1 },
-      { right: '8%', top: '65rem', width: '42%', height: '35rem', rotation: 1.8, borderRadius: 7, zIndex: 1 },
-      { left: '3%', top: '95rem', width: '48%', height: '45rem', rotation: -1.3, borderRadius: 11, zIndex: 1 },
-      { right: '12%', top: '115rem', width: '45%', height: '40rem', rotation: 1.5, borderRadius: 8, zIndex: 1 },
-      { left: '15%', top: '150rem', width: '52%', height: '42rem', rotation: -1.1, borderRadius: 10, zIndex: 1 },
-      { right: '0%', top: '175rem', width: '47%', height: '38rem', rotation: 1.6, borderRadius: 8, zIndex: 1 }
+      { right: '5%', top: '12rem', width: '40%', height: '40rem', rotation: 1.2, borderRadius: 8, zIndex: 1 },
+      { left: '10%', top: '38rem', width: '50%', height: '38rem', rotation: -1, borderRadius: 9, zIndex: 1 },
+      { right: '8%', top: '55rem', width: '42%', height: '35rem', rotation: 1.8, borderRadius: 7, zIndex: 1 },
+      { left: '3%', top: '78rem', width: '48%', height: '45rem', rotation: -1.3, borderRadius: 11, zIndex: 1 },
+      { right: '12%', top: '95rem', width: '45%', height: '40rem', rotation: 1.5, borderRadius: 8, zIndex: 1 },
+      { left: '15%', top: '120rem', width: '52%', height: '42rem', rotation: -1.1, borderRadius: 10, zIndex: 1 },
+      { right: '0%', top: '140rem', width: '47%', height: '38rem', rotation: 1.6, borderRadius: 8, zIndex: 1 },
+      { left: '8%', top: '165rem', width: '44%', height: '36rem', rotation: -1.4, borderRadius: 9, zIndex: 1 }
     ]
     return tabletLayouts[index % tabletLayouts.length]
   }
 
-  // Enhanced desktop layout with more artistic positioning
+  // Optimized desktop layout with seamless infinite scroll - reduced spacing
   const desktopLayouts = [
     { left: '0rem', top: '0rem', width: '35rem', height: '20rem', rotation: -2, borderRadius: 12, zIndex: 1 },
-    { left: '42.5rem', top: '15rem', width: '20rem', height: '25rem', rotation: 1.5, borderRadius: 8, zIndex: 1 },
-    { left: '7.5rem', top: '30rem', width: '30rem', height: '25rem', rotation: -1, borderRadius: 10, zIndex: 1 },
-    { right: '0rem', top: '5rem', width: '25rem', height: '15rem', rotation: 2.5, borderRadius: 6, zIndex: 1 },
-    { right: '7.5rem', top: '27.5rem', width: '20rem', height: '30rem', rotation: -1.5, borderRadius: 14, zIndex: 1 },
-    { left: '2.5rem', top: '60rem', width: '28.75rem', height: '37.5rem', rotation: 1, borderRadius: 9, zIndex: 1 },
-    { right: '0rem', top: '65rem', width: '25rem', height: '35rem', rotation: -2.5, borderRadius: 16, zIndex: 1 },
-    { left: '42.5rem', top: '47.5rem', width: '20rem', height: '25rem', rotation: 1.8, borderRadius: 7, zIndex: 1 },
-    { left: '37.5rem', top: '77.5rem', width: '25rem', height: '32.5rem', rotation: -1.2, borderRadius: 11, zIndex: 1 },
-    { right: '0rem', top: '107.5rem', width: '15rem', height: '21.5rem', rotation: 2.2, borderRadius: 8, zIndex: 1 },
-    { left: '35rem', top: '117.5rem', width: '40rem', height: '25rem', rotation: -1.8, borderRadius: 18, zIndex: 1 },
-    { left: '0rem', top: '105rem', width: '25rem', height: '35rem', rotation: 1.3, borderRadius: 10, zIndex: 1 }
+    { left: '42.5rem', top: '8rem', width: '20rem', height: '25rem', rotation: 1.5, borderRadius: 8, zIndex: 1 },
+    { left: '7.5rem', top: '22rem', width: '30rem', height: '25rem', rotation: -1, borderRadius: 10, zIndex: 1 },
+    { right: '0rem', top: '18rem', width: '25rem', height: '15rem', rotation: 2.5, borderRadius: 6, zIndex: 1 },
+    { right: '7.5rem', top: '35rem', width: '20rem', height: '30rem', rotation: -1.5, borderRadius: 14, zIndex: 1 },
+    { left: '2.5rem', top: '48rem', width: '28.75rem', height: '37.5rem', rotation: 1, borderRadius: 9, zIndex: 1 },
+    { right: '0rem', top: '58rem', width: '25rem', height: '35rem', rotation: -2.5, borderRadius: 16, zIndex: 1 },
+    { left: '42.5rem', top: '68rem', width: '20rem', height: '25rem', rotation: 1.8, borderRadius: 7, zIndex: 1 },
+    { left: '37.5rem', top: '88rem', width: '25rem', height: '32.5rem', rotation: -1.2, borderRadius: 11, zIndex: 1 }
   ]
 
   return desktopLayouts[index % desktopLayouts.length]
@@ -237,7 +238,7 @@ const Collections = () => {
           top: '0',
           left: '0',
           width: '100%',
-          height: '200rem', // Sufficient height for absolute positioned items
+          height: '120rem', // Reduced height to match optimized layout spacing
           visibility: 'hidden',
           pointerEvents: 'none'
         }}
