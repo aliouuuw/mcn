@@ -1,6 +1,8 @@
 import { Mesh, Program, Texture } from 'ogl'
 
-const vertexShader = `precision highp float;
+const vertexShader = `#define PI 3.1415926535897932384626433832795
+
+precision highp float;
 precision highp int;
 
 attribute vec3 position;
@@ -9,10 +11,15 @@ attribute vec2 uv;
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 
+uniform float uStrength;
+uniform vec2 uViewportSizes;
+
 varying vec2 vUv;
 
 void main() {
   vec4 newPosition = modelViewMatrix * vec4(position, 1.0);
+
+  newPosition.z += sin(newPosition.y / uViewportSizes.y * PI + PI / 2.0) * -uStrength;
 
   vUv = uv;
 
@@ -24,8 +31,21 @@ const fragmentShader = `precision highp float;
 uniform vec2 uImageSizes;
 uniform vec2 uPlaneSizes;
 uniform sampler2D tMap;
+uniform float uTime;
 
 varying vec2 vUv;
+
+// Random function for grain effect
+float random(vec2 st) {
+    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+}
+
+// Generate grain texture
+float grain(vec2 uv, float time) {
+    float noise = random(uv + time);
+    noise = random(vec2(noise, time));
+    return noise;
+}
 
 void main() {
   vec2 ratio = vec2(
@@ -38,8 +58,18 @@ void main() {
     vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
   );
 
-  gl_FragColor.rgb = texture2D(tMap, uv).rgb;
-  gl_FragColor.a = 1.0;
+  vec4 color = texture2D(tMap, uv);
+  
+  // Add subtle vignette effect
+  float dist = distance(vUv, vec2(0.5, 0.5));
+  float vignette = 1.0 - smoothstep(0.7, 1.2, dist);
+  color.rgb *= vignette;
+
+  // Add grain effect
+  float grainAmount = grain(vUv * 2.0, uTime) * 0.03;
+  color.rgb += grainAmount;
+
+  gl_FragColor = color;
 }`
 
 export default class Media {
@@ -79,7 +109,10 @@ export default class Media {
       uniforms: {
         tMap: { value: texture },
         uPlaneSizes: { value: [0, 0] },
-        uImageSizes: { value: [0, 0] }
+        uImageSizes: { value: [0, 0] },
+        uViewportSizes: { value: [this.viewport.width, this.viewport.height] },
+        uStrength: { value: 0 },
+        uTime: { value: 0 }
       },
       transparent: true
     })
@@ -139,6 +172,13 @@ export default class Media {
       this.isBefore = false
       this.isAfter = false
     }
+
+    // Calculate dynamic strength based on scroll velocity
+    const scrollVelocity = Math.abs(y.current - y.last) / this.screen.width
+    this.plane.program.uniforms.uStrength.value = scrollVelocity * 10
+    
+    // Update time uniform for potential animations
+    this.plane.program.uniforms.uTime.value = performance.now() * 0.001
   }
 
   onResize(sizes) {
@@ -149,7 +189,13 @@ export default class Media {
 
       if (height) this.height = height
       if (screen) this.screen = screen
-      if (viewport) this.viewport = viewport
+      if (viewport) {
+        this.viewport = viewport
+        // Update viewport sizes uniform for responsive wave calculations
+        if (this.plane && this.plane.program) {
+          this.plane.program.uniforms.uViewportSizes.value = [this.viewport.width, this.viewport.height]
+        }
+      }
     }
 
     this.createBounds()

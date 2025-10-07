@@ -6,7 +6,7 @@ import Media from './Media.js'
 export default class WebGLGallery {
   constructor(galleryElement) {
     this.scroll = {
-      ease: 0.08,
+      ease: 0.05,
       current: 0,
       target: 0,
       last: 0
@@ -106,7 +106,7 @@ export default class WebGLGallery {
     const normalized = NormalizeWheel(event)
     const speed = normalized.pixelY
 
-    this.scroll.target += speed * 0.4
+    this.scroll.target += speed * 0.5
   }
 
   onResize() {
