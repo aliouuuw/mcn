@@ -143,6 +143,21 @@ export default class Media {
     this.scene = scene
     this.screen = screen
     this.viewport = viewport
+    this.isDestroyed = false
+    this.textureLoadingState = 'loading'
+    this.textureError = null
+    this.textureLoadStartTime = performance.now()
+    this.loadTimeout = null
+
+    // Set up load timeout for better error handling
+    this.loadTimeout = setTimeout(() => {
+      if (this.textureLoadingState === 'loading') {
+        this.textureLoadingState = 'timeout'
+        this.textureError = 'Image loading timeout'
+        console.warn(`Image loading timeout: ${this.image.src}`)
+        this.updateElementState()
+      }
+    }, 10000) // 10 second timeout
 
     this.createMesh()
     this.createBounds()
@@ -163,22 +178,67 @@ export default class Media {
     const grainImage = new Image()
     grainImage.crossOrigin = 'anonymous'
     grainImage.onload = () => {
+      if (this.isDestroyed) return
       grainTexture.image = grainImage
       // Ensure texture is updated when image loads
-      if (program.uniforms.tGrain) {
+      if (program && program.uniforms && program.uniforms.tGrain) {
         program.uniforms.tGrain.value = grainTexture
       }
     }
     grainImage.onerror = () => {
+      if (this.isDestroyed) return
       console.warn('Grain texture failed to load, using procedural grain')
       // Keep default white texture for procedural fallback
     }
     grainImage.src = '/images/grain.png'
 
-    image.src = this.image.src
+    image.crossOrigin = 'anonymous'
     image.onload = () => {
-      program.uniforms.uImageSizes.value = [image.naturalWidth, image.naturalHeight]
+      if (this.isDestroyed) return
+      
+      // Clear timeout on successful load
+      if (this.loadTimeout) {
+        clearTimeout(this.loadTimeout)
+        this.loadTimeout = null
+      }
+      
+      const loadTime = performance.now() - this.textureLoadStartTime
+      console.log(`Image loaded successfully: ${this.image.src} (${Math.round(loadTime)}ms)`)
+      
+      this.textureLoadingState = 'loaded'
+      if (program && program.uniforms && program.uniforms.uImageSizes) {
+        program.uniforms.uImageSizes.value = [image.naturalWidth, image.naturalHeight]
+      }
       texture.image = image
+      
+      // Update element state to show loaded content
+      this.updateElementState()
+    }
+    image.onerror = () => {
+      if (this.isDestroyed) return
+      
+      // Clear timeout on error
+      if (this.loadTimeout) {
+        clearTimeout(this.loadTimeout)
+        this.loadTimeout = null
+      }
+      
+      this.textureLoadingState = 'error'
+      this.textureError = 'Failed to load image'
+      console.error('Failed to load image:', this.image.src)
+      
+      // Update element state to show error
+      this.updateElementState()
+    }
+    
+    // Start loading the image
+    try {
+      image.src = this.image.src
+    } catch (error) {
+      console.error('Error setting image source:', error)
+      this.textureLoadingState = 'error'
+      this.textureError = 'Error loading image source'
+      this.updateElementState()
     }
 
     const program = new Program(this.gl, {
@@ -230,6 +290,8 @@ export default class Media {
   }
 
   update(y, direction) {
+    if (this.isDestroyed) return
+
     this.updateScale()
     this.updateX()
     this.updateY(y.current)
@@ -264,10 +326,12 @@ export default class Media {
     
     // Apply strength with smooth interpolation
     const targetStrength = Math.min(enhancedStrength, 2.0) // Cap maximum strength
-    this.plane.program.uniforms.uStrength.value = targetStrength
-    
-    // Update time uniform for animations
-    this.plane.program.uniforms.uTime.value = performance.now() * 0.001
+    if (this.plane && this.plane.program && this.plane.program.uniforms) {
+      this.plane.program.uniforms.uStrength.value = targetStrength
+      
+      // Update time uniform for animations
+      this.plane.program.uniforms.uTime.value = performance.now() * 0.001
+    }
   }
 
   onResize(sizes) {
@@ -288,5 +352,118 @@ export default class Media {
     }
 
     this.createBounds()
+  }
+
+  // Update element state based on loading status
+  updateElementState() {
+    if (!this.element || !this.image) return
+    
+    const imgElement = this.image
+    const container = this.element
+    
+    // Remove existing state classes
+    container.classList.remove('loading', 'loaded', 'error', 'timeout')
+    
+    // Declare variables outside switch statement
+    let loadingOverlay, errorOverlay
+    
+    // Add appropriate state class
+    switch (this.textureLoadingState) {
+      case 'loading':
+        container.classList.add('loading')
+        // Add loading overlay
+        if (!container.querySelector('.loading-overlay')) {
+          const overlay = document.createElement('div')
+          overlay.className = 'loading-overlay'
+          overlay.innerHTML = '<div class="loading-spinner"></div>'
+          container.appendChild(overlay)
+        }
+        break
+        
+      case 'loaded':
+        container.classList.add('loaded')
+        // Remove loading overlay if present
+        loadingOverlay = container.querySelector('.loading-overlay')
+        if (loadingOverlay) {
+          loadingOverlay.remove()
+        }
+        // Show the image
+        if (imgElement) {
+          imgElement.style.opacity = '1'
+        }
+        break
+        
+      case 'error':
+      case 'timeout':
+        container.classList.add('error')
+        // Remove loading overlay if present
+        errorOverlay = container.querySelector('.loading-overlay')
+        if (errorOverlay) {
+          errorOverlay.remove()
+        }
+        // Show error state
+        if (imgElement) {
+          imgElement.style.opacity = '0.3'
+        }
+        // Add error overlay
+        if (!container.querySelector('.error-overlay')) {
+          const overlay = document.createElement('div')
+          overlay.className = 'error-overlay'
+          overlay.innerHTML = '<div class="error-icon">⚠️</div><div class="error-text">Failed to load</div>'
+          container.appendChild(overlay)
+        }
+        break
+    }
+  }
+
+  destroy() {
+    if (this.isDestroyed) return
+    this.isDestroyed = true
+
+    // Clear any pending timeouts
+    if (this.loadTimeout) {
+      clearTimeout(this.loadTimeout)
+      this.loadTimeout = null
+    }
+
+    // Clean up plane and program
+    if (this.plane) {
+      try {
+        if (this.plane.program) {
+          this.plane.program.dispose()
+          this.plane.program = null
+        }
+        if (this.plane.geometry) {
+          this.plane.geometry.dispose()
+          this.plane.geometry = null
+        }
+        if (this.plane.parent) {
+          this.plane.parent.removeChild(this.plane)
+        }
+        this.plane = null
+      } catch (error) {
+        console.warn('Error destroying plane:', error)
+      }
+    }
+
+    // Clean up DOM overlays
+    if (this.element) {
+      // Remove any loading/error overlays
+      const overlays = this.element.querySelectorAll('.loading-overlay, .error-overlay')
+      overlays.forEach(overlay => overlay.remove())
+      
+      // Reset image styles
+      if (this.image) {
+        this.image.style.opacity = '1'
+      }
+    }
+
+    // Clear references
+    this.element = null
+    this.image = null
+    this.gl = null
+    this.screen = null
+    this.viewport = null
+    this.geometry = null
   }
 }

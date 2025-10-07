@@ -107,6 +107,9 @@ const Collections = () => {
   const [hasError, setHasError] = useState(false)
 
   useEffect(() => {
+    let isMounted = true
+    let initTimeout = null
+
     const initGallery = async () => {
       try {
         // Check WebGL support
@@ -126,21 +129,27 @@ const Collections = () => {
         }
 
         // Initialize WebGL gallery after component mounts
-        if (galleryRef.current && !webglGalleryRef.current) {
+        if (galleryRef.current && !webglGalleryRef.current && isMounted) {
           // Add loading delay for smooth transition
           await new Promise(resolve => setTimeout(resolve, 500))
+          
+          if (!isMounted) return // Check if component is still mounted
           
           webglGalleryRef.current = new WebGLGallery(galleryRef.current)
           
           // Enhanced loading state with smooth transition
-          setTimeout(() => {
-            setIsLoading(false)
+          initTimeout = setTimeout(() => {
+            if (isMounted) {
+              setIsLoading(false)
+            }
           }, 1500)
         }
       } catch (error) {
         console.error('Failed to initialize WebGL gallery:', error)
-        setHasError(true)
-        setIsLoading(false)
+        if (isMounted) {
+          setHasError(true)
+          setIsLoading(false)
+        }
       }
     }
 
@@ -148,8 +157,18 @@ const Collections = () => {
 
     // Enhanced cleanup on unmount
     return () => {
+      isMounted = false
+      
+      // Clear any pending timeouts
+      if (initTimeout) {
+        clearTimeout(initTimeout)
+        initTimeout = null
+      }
+
+      // Force cleanup when component unmounts
       if (webglGalleryRef.current) {
         try {
+          console.log('Collections: Cleaning up WebGL gallery...')
           webglGalleryRef.current.destroy()
         } catch (error) {
           console.error('Error during cleanup:', error)
@@ -186,12 +205,28 @@ const Collections = () => {
             <p className="text-[#7f1d1d] text-sm mb-6">
               We're unable to load the WebGL gallery. This might be due to your browser not supporting WebGL or a graphics hardware issue.
             </p>
-            <button 
-              onClick={() => window.location.reload()}
-              className="px-6 py-2 bg-[#dc2626] text-white rounded-lg hover:bg-[#b91c1c] transition-colors"
-            >
-              Try Again
-            </button>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button 
+                onClick={() => {
+                  setHasError(false)
+                  setIsLoading(true)
+                  // Force re-initialization
+                  if (webglGalleryRef.current) {
+                    webglGalleryRef.current.destroy()
+                    webglGalleryRef.current = null
+                  }
+                }}
+                className="px-6 py-2 bg-[#dc2626] text-white rounded-lg hover:bg-[#b91c1c] transition-colors"
+              >
+                Try Again
+              </button>
+              <button 
+                onClick={() => window.location.reload()}
+                className="px-6 py-2 bg-[#f3f4f6] text-[#374151] rounded-lg hover:bg-[#e5e7eb] transition-colors"
+              >
+                Reload Page
+              </button>
+            </div>
           </div>
         </div>
       )}

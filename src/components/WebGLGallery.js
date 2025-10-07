@@ -13,6 +13,8 @@ export default class WebGLGallery {
     }
 
     this.speed = 2
+    this.isDestroyed = false
+    this.animationId = null
 
     this.createRenderer()
     this.createCamera()
@@ -45,7 +47,10 @@ export default class WebGLGallery {
     this.gl.canvas.style.width = '100%'
     this.gl.canvas.style.height = '100%'
     this.gl.canvas.style.zIndex = '1'
+    this.gl.canvas.style.pointerEvents = 'none'
     
+    // Store reference to canvas for proper cleanup
+    this.canvas = this.gl.canvas
     document.body.appendChild(this.gl.canvas)
   }
 
@@ -151,6 +156,8 @@ export default class WebGLGallery {
   }
 
   update() {
+    if (this.isDestroyed) return
+
     this.scroll.target += this.speed
 
     this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease)
@@ -174,7 +181,7 @@ export default class WebGLGallery {
 
     this.scroll.last = this.scroll.current
 
-    window.requestAnimationFrame(this.update.bind(this))
+    this.animationId = window.requestAnimationFrame(this.update.bind(this))
   }
 
   onMouseMove(event) {
@@ -264,56 +271,114 @@ export default class WebGLGallery {
   }
 
   destroy() {
-    // Remove all event listeners
-    window.removeEventListener('resize', this.onResize.bind(this))
-    window.removeEventListener('mousewheel', this.onWheel.bind(this))
-    window.removeEventListener('wheel', this.onWheel.bind(this))
-    window.removeEventListener('mousedown', this.onTouchDown.bind(this))
-    window.removeEventListener('mousemove', this.onTouchMove.bind(this))
-    window.removeEventListener('mouseup', this.onTouchUp.bind(this))
-    window.removeEventListener('touchstart', this.onTouchDown.bind(this))
-    window.removeEventListener('touchmove', this.onTouchMove.bind(this))
-    window.removeEventListener('touchend', this.onTouchUp.bind(this))
+    if (this.isDestroyed) return
+    this.isDestroyed = true
 
-    // Clean up mouse tracking event listeners
-    if (this.gl.canvas) {
-      this.gl.canvas.removeEventListener('mousemove', this.onMouseMove)
-      this.gl.canvas.removeEventListener('mouseenter', this.onMouseEnter)
-      this.gl.canvas.removeEventListener('mouseleave', this.onMouseLeave)
+    console.log('WebGLGallery: Starting cleanup...')
+
+    // Cancel animation frame
+    if (this.animationId) {
+      window.cancelAnimationFrame(this.animationId)
+      this.animationId = null
+    }
+
+    // Remove all event listeners
+    const removeEventListeners = () => {
+      window.removeEventListener('resize', this.onResize)
+      window.removeEventListener('mousewheel', this.onWheel)
+      window.removeEventListener('wheel', this.onWheel)
+      window.removeEventListener('mousedown', this.onTouchDown)
+      window.removeEventListener('mousemove', this.onTouchMove)
+      window.removeEventListener('mouseup', this.onTouchUp)
+      window.removeEventListener('touchstart', this.onTouchDown)
+      window.removeEventListener('touchmove', this.onTouchMove)
+      window.removeEventListener('touchend', this.onTouchUp)
+
+      // Clean up mouse tracking event listeners
+      if (this.canvas) {
+        this.canvas.removeEventListener('mousemove', this.onMouseMove)
+        this.canvas.removeEventListener('mouseenter', this.onMouseEnter)
+        this.canvas.removeEventListener('mouseleave', this.onMouseLeave)
+      }
+    }
+
+    // Use try-catch to handle potential errors during listener removal
+    try {
+      removeEventListeners()
+    } catch (error) {
+      console.warn('Error removing event listeners:', error)
     }
 
     // Clean up media objects
     if (this.medias) {
-      this.medias.forEach(media => {
-        if (media.plane) {
-          // Dispose of geometry and program
-          if (media.plane.geometry) {
-            media.plane.geometry.dispose()
+      this.medias.forEach((media, index) => {
+        try {
+          if (media && media.destroy) {
+            media.destroy()
           }
-          if (media.plane.program) {
-            media.plane.program.dispose()
-          }
-          // Remove from scene
-          if (media.plane.parent) {
-            media.plane.parent.removeChild(media.plane)
-          }
+        } catch (error) {
+          console.warn(`Error destroying media ${index}:`, error)
         }
       })
       this.medias = null
     }
 
+    // Clean up geometry
+    if (this.planeGeometry) {
+      try {
+        this.planeGeometry.dispose()
+      } catch (error) {
+        console.warn('Error disposing plane geometry:', error)
+      }
+      this.planeGeometry = null
+    }
+
     // Clean up renderer and canvas
     if (this.renderer) {
-      this.renderer.dispose()
+      try {
+        this.renderer.dispose()
+      } catch (error) {
+        console.warn('Error disposing renderer:', error)
+      }
+      this.renderer = null
     }
 
-    if (this.gl.canvas && this.gl.canvas.parentNode) {
-      this.gl.canvas.parentNode.removeChild(this.gl.canvas)
+    // Force WebGL context loss
+    if (this.gl && this.gl.getExtension) {
+      try {
+        const loseContext = this.gl.getExtension('WEBGL_lose_context')
+        if (loseContext) {
+          loseContext.loseContext()
+        }
+      } catch (error) {
+        console.warn('Error forcing WebGL context loss:', error)
+      }
     }
 
-    // Clear references
+    // Remove canvas from DOM
+    if (this.canvas && this.canvas.parentNode) {
+      try {
+        this.canvas.parentNode.removeChild(this.canvas)
+      } catch (error) {
+        console.warn('Error removing canvas from DOM:', error)
+      }
+    }
+
+    // Clear canvas content and references
+    if (this.canvas) {
+      this.canvas.width = 0
+      this.canvas.height = 0
+      this.canvas = null
+    }
+
+    // Clear all other references
     this.hoveredMedia = null
     this.mediasElements = null
     this.gallery = null
+    this.gl = null
+    this.camera = null
+    this.scene = null
+
+    console.log('WebGLGallery: Cleanup completed')
   }
 }
