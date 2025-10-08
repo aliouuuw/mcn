@@ -269,6 +269,15 @@ export default class Media {
   createBounds() {
     this.bounds = this.element.getBoundingClientRect()
 
+    // Add small delay to ensure grid layout has settled
+    setTimeout(() => {
+      if (this.isDestroyed) return
+      this.bounds = this.element.getBoundingClientRect()
+      this.updateScale()
+      this.updateX()
+      this.updateY()
+    }, 50)
+
     this.updateScale()
     this.updateX()
     this.updateY()

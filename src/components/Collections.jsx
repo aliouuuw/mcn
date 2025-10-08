@@ -10,59 +10,6 @@ const artifacts = artifactsData
 // Use original artifacts array - Media.js handles infinite looping
 const infiniteArtifacts = artifacts
 
-// Enhanced artistic asymmetric layout function with seamless infinite scroll
-const getArtisticLayout = (index) => {
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-  const isTablet = typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth < 1200
-
-  if (isMobile) {
-    // Optimized mobile layout with reduced spacing for seamless scroll
-    const mobileLayouts = [
-      { left: '5%', top: '0rem', width: '90%', height: '25rem', rotation: -1, borderRadius: 8, zIndex: 1 },
-      { left: '10%', top: '28rem', width: '80%', height: '30rem', rotation: 1, borderRadius: 6, zIndex: 1 },
-      { left: '0%', top: '60rem', width: '85%', height: '28rem', rotation: -0.5, borderRadius: 7, zIndex: 1 },
-      { right: '5%', top: '90rem', width: '75%', height: '26rem', rotation: 0.8, borderRadius: 6, zIndex: 1 },
-      { left: '8%', top: '118rem', width: '82%', height: '32rem', rotation: -1.2, borderRadius: 8, zIndex: 1 },
-      { right: '3%', top: '152rem', width: '88%', height: '29rem', rotation: 1.1, borderRadius: 7, zIndex: 1 },
-      { left: '12%', top: '183rem', width: '76%', height: '27rem', rotation: -0.8, borderRadius: 9, zIndex: 1 },
-      { right: '8%', top: '212rem', width: '84%', height: '31rem', rotation: 1.3, borderRadius: 6, zIndex: 1 },
-      { left: '6%', top: '245rem', width: '88%', height: '28rem', rotation: -1.1, borderRadius: 8, zIndex: 1 }
-    ]
-    return mobileLayouts[index % mobileLayouts.length]
-  }
-
-  if (isTablet) {
-    // Optimized tablet layout with reduced spacing for seamless scroll
-    const tabletLayouts = [
-      { left: '5%', top: '0rem', width: '45%', height: '35rem', rotation: -1.5, borderRadius: 10, zIndex: 1 },
-      { right: '5%', top: '12rem', width: '40%', height: '40rem', rotation: 1.2, borderRadius: 8, zIndex: 1 },
-      { left: '10%', top: '38rem', width: '50%', height: '38rem', rotation: -1, borderRadius: 9, zIndex: 1 },
-      { right: '8%', top: '55rem', width: '42%', height: '35rem', rotation: 1.8, borderRadius: 7, zIndex: 1 },
-      { left: '3%', top: '78rem', width: '48%', height: '45rem', rotation: -1.3, borderRadius: 11, zIndex: 1 },
-      { right: '12%', top: '95rem', width: '45%', height: '40rem', rotation: 1.5, borderRadius: 8, zIndex: 1 },
-      { left: '15%', top: '120rem', width: '52%', height: '42rem', rotation: -1.1, borderRadius: 10, zIndex: 1 },
-      { right: '0%', top: '140rem', width: '47%', height: '38rem', rotation: 1.6, borderRadius: 8, zIndex: 1 },
-      { left: '8%', top: '165rem', width: '44%', height: '36rem', rotation: -1.4, borderRadius: 9, zIndex: 1 }
-    ]
-    return tabletLayouts[index % tabletLayouts.length]
-  }
-
-  // Optimized desktop layout with seamless infinite scroll - reduced spacing
-  const desktopLayouts = [
-    { left: '0rem', top: '0rem', width: '35rem', height: '20rem', rotation: -2, borderRadius: 12, zIndex: 1 },
-    { left: '42.5rem', top: '8rem', width: '20rem', height: '25rem', rotation: 1.5, borderRadius: 8, zIndex: 1 },
-    { left: '7.5rem', top: '22rem', width: '30rem', height: '25rem', rotation: -1, borderRadius: 10, zIndex: 1 },
-    { right: '0rem', top: '18rem', width: '25rem', height: '15rem', rotation: 2.5, borderRadius: 6, zIndex: 1 },
-    { right: '7.5rem', top: '35rem', width: '20rem', height: '30rem', rotation: -1.5, borderRadius: 14, zIndex: 1 },
-    { left: '2.5rem', top: '48rem', width: '28.75rem', height: '37.5rem', rotation: 1, borderRadius: 9, zIndex: 1 },
-    { right: '0rem', top: '58rem', width: '25rem', height: '35rem', rotation: -2.5, borderRadius: 16, zIndex: 1 },
-    { left: '42.5rem', top: '68rem', width: '20rem', height: '25rem', rotation: 1.8, borderRadius: 7, zIndex: 1 },
-    { left: '37.5rem', top: '88rem', width: '25rem', height: '32.5rem', rotation: -1.2, borderRadius: 11, zIndex: 1 }
-  ]
-
-  return desktopLayouts[index % desktopLayouts.length]
-}
-
 
 const Collections = () => {
   const galleryRef = useRef()
@@ -229,7 +176,7 @@ const Collections = () => {
         </p>
       </div>
 
-      {/* Hidden gallery container for WebGL to reference - Absolute positioning like template */}
+      {/* Gallery container using CSS Grid with improved scattered layout */}
       <div
         ref={galleryRef}
         className="gallery-container"
@@ -238,30 +185,106 @@ const Collections = () => {
           top: '0',
           left: '0',
           width: '100%',
-          height: '120rem', // Reduced height to match optimized layout spacing
+          minHeight: '100vh',
           visibility: 'hidden',
-          pointerEvents: 'none'
+          pointerEvents: 'none',
+          display: 'grid',
+          gridTemplateColumns: typeof window !== 'undefined' && window.innerWidth < 768
+            ? 'repeat(2, 1fr)' // Mobile: 2 columns
+            : typeof window !== 'undefined' && window.innerWidth < 1200
+            ? 'repeat(4, 1fr)' // Tablet: 4 columns
+            : 'repeat(6, 1fr)', // Desktop: 6 columns for better spacing
+          gap: '2rem',
+          padding: '3rem',
+          alignItems: 'start' // Align items to top to prevent vertical overlap
         }}
       >
         {infiniteArtifacts.map((artifact, index) => {
-          // Artistic asymmetric layout with absolute positioning and proper spacing
-          const layout = getArtisticLayout(index)
+          const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+          const isTablet = typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth < 1200
+
+          // Calculate grid spans for scattered effect on larger screens
+          let gridColumnSpan = 'span 1'
+          let gridRowSpan = 'span 1'
+
+          if (!isMobile && !isTablet) {
+            // Desktop: Enhanced randomization to create more spaced-out, organic layout
+            const seed = index * 17 % 100 // Different seed for more variety
+
+            // Column spans: favor smaller spans for better spacing
+            let colSpan
+            if (seed < 60) colSpan = 1 // 60% chance for 1-column (most common)
+            else if (seed < 85) colSpan = 2 // 25% chance for 2-column
+            else colSpan = 3 // 15% chance for 3-column (rare)
+
+            // Row spans: create vertical variety
+            const rowSeed = index * 23 % 100
+            let rowSpan
+            if (rowSeed < 55) rowSpan = 1 // 55% chance for 1-row
+            else if (rowSeed < 85) rowSpan = 2 // 30% chance for 2-row
+            else rowSpan = 3 // 15% chance for 3-row
+
+            // Advanced logic to prevent consecutive large spans and create gaps
+            if (index > 0) {
+              const prevSeed = (index - 1) * 17 % 100
+              let prevColSpan = 1
+              if (prevSeed >= 60 && prevSeed < 85) prevColSpan = 2
+              else if (prevSeed >= 85) prevColSpan = 3
+
+              // If previous was large, prefer smaller spans and add spacing
+              if (prevColSpan >= 2) {
+                colSpan = Math.max(1, colSpan - 1)
+                // Occasionally skip a column by using auto-placement
+                if (seed % 7 === 0) {
+                  gridColumnSpan = 'span 1'
+                  // Add random column start to create gaps
+                  const colStart = 1 + (seed % 5)
+                  gridColumnSpan = `${colStart} / span 1`
+                }
+              }
+            }
+
+            gridColumnSpan = `span ${colSpan}`
+            gridRowSpan = `span ${rowSpan}`
+          }
+
+          // Calculate responsive dimensions with more consistent heights
+          let itemHeight
+          if (isMobile) {
+            itemHeight = `${22 + (index % 3) * 6}rem` // Mobile: 22rem, 28rem, 34rem
+          } else if (isTablet) {
+            itemHeight = `${28 + (index % 4) * 5}rem` // Tablet: 28rem, 33rem, 38rem, 43rem
+          } else {
+            // Desktop: Height based on row span with more variation
+            const baseHeights = {1: 28, 2: 38, 3: 48}
+            const spanNum = parseInt(gridRowSpan.split(' ')[1]) || 1
+            const variation = (index % 5) * 3 // More subtle variation
+            itemHeight = `${baseHeights[spanNum] + variation}rem`
+          }
+
+          // Add random positioning within grid cells for organic feel
+          const justifyOptions = ['start', 'center', 'end']
+          const alignOptions = ['start', 'center', 'end']
+          const justifySelf = justifyOptions[index % justifyOptions.length]
+          const alignSelf = alignOptions[(index * 2) % alignOptions.length]
 
           return (
             <div
               key={`${artifact.src}-${index}`}
               className="gallery-item"
               style={{
-                position: 'absolute',
-                left: layout.left,
-                right: layout.right,
-                top: layout.top,
-                width: layout.width,
-                height: layout.height,
-                transform: `rotate(${layout.rotation}deg)`,
-                borderRadius: `${layout.borderRadius}px`,
-                zIndex: layout.zIndex || 1,
-                transition: 'all 0.3s ease-out'
+                height: itemHeight,
+                borderRadius: `${10 + (index % 3) * 2}px`, // More subtle border radius variation
+                overflow: 'hidden',
+                transition: 'all 0.4s ease-out',
+                gridColumn: gridColumnSpan,
+                gridRow: gridRowSpan,
+                justifySelf: justifySelf,
+                alignSelf: alignSelf,
+                // Add margin for extra spacing between items
+                margin: `${(index % 2) * 0.5}rem`,
+                // Ensure minimum spacing
+                minWidth: isMobile ? '120px' : isTablet ? '150px' : '180px'
               }}
             >
               <img

@@ -168,13 +168,16 @@ export default class WebGLGallery {
     this.galleryBounds = this.gallery.getBoundingClientRect()
     this.galleryHeight = this.viewport.height * this.galleryBounds.height / this.screen.height
 
-    if (this.medias) {
-      this.medias.forEach(media => media.onResize({
-        height: this.galleryHeight,
-        screen: this.screen,
-        viewport: this.viewport
-      }))
-    }
+    // Add delay to ensure grid layout has settled before updating media positions
+    setTimeout(() => {
+      if (this.medias) {
+        this.medias.forEach(media => media.onResize({
+          height: this.galleryHeight,
+          screen: this.screen,
+          viewport: this.viewport
+        }))
+      }
+    }, 100) // Slightly longer delay for grid layout
   }
 
   update() {
