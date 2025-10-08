@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import VideoBackground from '../components/VideoBackground'
 
 // Animation variants
 const containerVariants = {
@@ -168,7 +169,7 @@ const HomeComponent = () => {
       onMouseEnter={() => setIsHoveringHero(true)}
       onMouseLeave={() => setIsHoveringHero(false)}
     >
-      <div className="absolute inset-0 hero-bg-smooth" aria-hidden="true" />
+      <VideoBackground />
       <div className="absolute inset-0 hero-overlay-smooth" aria-hidden="true" />
       
       {/* Cursor-following sandy mask */}
@@ -296,18 +297,6 @@ const HomeComponent = () => {
               >
                 Découvrir les collections
               </motion.a>
-              
-              <motion.div 
-                className="hero-context"
-                variants={containerVariants}
-              >
-                <motion.span variants={contextVariants}>
-                  18 000 œuvres
-                </motion.span>
-                <motion.span variants={contextVariants}>
-                  Cultures du monde noir
-                </motion.span>
-              </motion.div>
             </motion.div>
           </motion.section>
         </main>

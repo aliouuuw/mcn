@@ -1,9 +1,13 @@
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 
 const RootComponent = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const location = useLocation()
+
+  // Check if we're on the home page (hero section)
+  const isHomePage = location.pathname === '/'
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
@@ -22,8 +26,8 @@ const RootComponent = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <motion.nav 
-          className="nav-shell"
+        <motion.nav
+          className={`nav-shell ${isHomePage ? 'nav-shell-hero' : 'nav-shell-default'}`}
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
