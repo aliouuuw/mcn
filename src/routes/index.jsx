@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import VideoBackground from '../components/VideoBackground'
 
 // Animation variants
@@ -113,6 +114,7 @@ const contextVariants = {
 }
 
 const HomeComponent = () => {
+  const { t, i18n } = useTranslation()
   const [hoveredIndex, setHoveredIndex] = useState(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
   const [isHoveringHero, setIsHoveringHero] = useState(false)
@@ -159,12 +161,13 @@ const HomeComponent = () => {
   }, [isHoveringHero])
   
   // Pre-calculate character positions for cleaner code
-  const titleText = "Explorez l'héritage des Civilisations Noires"
+  const titleText = t('hero.title')
   const words = titleText.split(" ")
   let globalCharIndex = 0
 
   return (
     <div 
+      key={i18n.language} // Force re-render when language changes
       className="hero-root relative min-h-screen overflow-hidden text-black"
       onMouseEnter={() => setIsHoveringHero(true)}
       onMouseLeave={() => setIsHoveringHero(false)}
@@ -205,7 +208,7 @@ const HomeComponent = () => {
               className="hero-kicker"
               variants={kickerVariants}
             >
-              Mémoire · Culture · Identité
+              {t('hero.kicker')}
             </motion.p>
             
             <motion.h1 
@@ -280,9 +283,8 @@ const HomeComponent = () => {
             <motion.p 
               className="hero-subtitle"
               variants={textVariants}
-            >
-              Explorez <strong>18 000</strong> œuvres qui retracent l'évolution des civilisations noires à travers le temps et l'espace.
-            </motion.p>
+              dangerouslySetInnerHTML={{ __html: t('hero.subtitle') }}
+            />
             
             <motion.div 
               className="hero-meta"
@@ -295,7 +297,7 @@ const HomeComponent = () => {
                 whileHover="hover"
                 whileTap="tap"
               >
-                Découvrir les collections
+                {t('hero.cta')}
               </motion.a>
             </motion.div>
           </motion.section>

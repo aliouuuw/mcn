@@ -1,8 +1,11 @@
 import { createRootRoute, Link, Outlet, useLocation } from '@tanstack/react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import LanguageSwitcher from '../components/LanguageSwitcher'
 
 const RootComponent = () => {
+  const { t } = useTranslation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const location = useLocation()
 
@@ -39,95 +42,74 @@ const RootComponent = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <Link to="/" onClick={closeMobileMenu}>
-              <motion.span 
+              <motion.span
                 className="nav-brand"
                 whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
               >
-                Musée des Civilisations Noires
+                {t('nav.museum')}
               </motion.span>
             </Link>
-            <motion.span 
+            <motion.span
               className="nav-tagline hidden sm:block"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.4 }}
             >
-              Civilisations noires · Patrimoine mondial
+              {t('nav.tagline')}
             </motion.span>
           </motion.div>
           
           {/* Desktop Navigation */}
-          <motion.div 
+          <motion.div
             className="nav-links hidden md:flex"
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5 }}
           >
             <Link to="/collections">
-              <motion.span 
+              <motion.span
                 className="nav-link"
-                whileHover={{ 
-                  y: -2, 
-                  transition: { duration: 0.2 } 
+                whileHover={{
+                  y: -2,
+                  transition: { duration: 0.2 }
                 }}
               >
-                Collections
+                {t('nav.collections')}
               </motion.span>
             </Link>
             <Link to="/agenda">
-              <motion.span 
+              <motion.span
                 className="nav-link"
-                whileHover={{ 
-                  y: -2, 
-                  transition: { duration: 0.2 } 
+                whileHover={{
+                  y: -2,
+                  transition: { duration: 0.2 }
                 }}
               >
-                Agenda
+                {t('nav.agenda')}
               </motion.span>
             </Link>
             <Link to="/visite">
-              <motion.span 
+              <motion.span
                 className="nav-link"
-                whileHover={{ 
-                  y: -2, 
-                  transition: { duration: 0.2 } 
+                whileHover={{
+                  y: -2,
+                  transition: { duration: 0.2 }
                 }}
               >
-                Visite
+                {t('nav.visit')}
               </motion.span>
             </Link>
           </motion.div>
           
-          <motion.div 
+          <motion.div
             className="nav-actions"
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.7 }}
           >
-            {/* Desktop Language Pills */}
-            <div className="hidden md:flex gap-2">
-              {[{ lang: "FR", active: true }, { lang: "EN", active: false }].map((item, index) => (
-                <motion.button 
-                  key={item.lang}
-                  type="button" 
-                  className={`nav-pill ${item.active ? 'is-active' : ''}`}
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ 
-                    duration: 0.3, 
-                    delay: 0.8 + index * 0.1,
-                    type: "spring",
-                    stiffness: 200
-                  }}
-                  whileHover={{ 
-                    scale: 1.1,
-                    transition: { duration: 0.2 }
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {item.lang}
-                </motion.button>
-              ))}
+            {/* Desktop Language Switcher */}
+            <div className="hidden md:block">
+              <LanguageSwitcher />
             </div>
 
             {/* Mobile Menu Button */}
@@ -137,13 +119,13 @@ const RootComponent = () => {
               onClick={toggleMobileMenu}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ 
-                duration: 0.3, 
+              transition={{
+                duration: 0.3,
                 delay: 0.8,
                 type: "spring",
                 stiffness: 200
               }}
-              whileHover={{ 
+              whileHover={{
                 scale: 1.1,
                 transition: { duration: 0.2 }
               }}
@@ -177,63 +159,42 @@ const RootComponent = () => {
               >
                 <div className="mobile-nav-links">
                   <Link to="/collections" onClick={closeMobileMenu}>
-                    <motion.span 
+                    <motion.span
                       className="mobile-nav-link"
-                      whileHover={{ 
+                      whileHover={{
                         x: 4,
-                        transition: { duration: 0.2 } 
+                        transition: { duration: 0.2 }
                       }}
                     >
-                      Collections
+                      {t('nav.collections')}
                     </motion.span>
                   </Link>
                   <Link to="/agenda" onClick={closeMobileMenu}>
-                    <motion.span 
+                    <motion.span
                       className="mobile-nav-link"
-                      whileHover={{ 
+                      whileHover={{
                         x: 4,
-                        transition: { duration: 0.2 } 
+                        transition: { duration: 0.2 }
                       }}
                     >
-                      Agenda
+                      {t('nav.agenda')}
                     </motion.span>
                   </Link>
                   <Link to="/visite" onClick={closeMobileMenu}>
-                    <motion.span 
+                    <motion.span
                       className="mobile-nav-link"
-                      whileHover={{ 
+                      whileHover={{
                         x: 4,
-                        transition: { duration: 0.2 } 
+                        transition: { duration: 0.2 }
                       }}
                     >
-                      Visite
+                      {t('nav.visit')}
                     </motion.span>
                   </Link>
                 </div>
-                
+
                 <div className="mobile-nav-actions">
-                  {[{ lang: "FR", active: true }, { lang: "EN", active: false }].map((item, index) => (
-                    <motion.button 
-                      key={item.lang}
-                      type="button" 
-                      className={`mobile-nav-pill ${item.active ? 'is-active' : ''}`}
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ 
-                        duration: 0.3, 
-                        delay: 0.9 + index * 0.1,
-                        type: "spring",
-                        stiffness: 200
-                      }}
-                      whileHover={{ 
-                        scale: 1.05,
-                        transition: { duration: 0.2 }
-                      }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {item.lang}
-                    </motion.button>
-                  ))}
+                  <LanguageSwitcher />
                 </div>
               </motion.div>
             </motion.div>

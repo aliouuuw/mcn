@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import ShareComponent from '../components/ShareComponent'
 
 // Import real artifacts data
@@ -32,53 +33,6 @@ const textVariants = {
   }
 }
 
-const uiText = {
-  back: {
-    fr: 'Retour aux collections',
-    en: 'Back to collections',
-    wo: 'Dellusi ci koleksiyoŋ'
-  },
-  story: {
-    fr: 'L’histoire',
-    en: 'The story',
-    wo: 'Leeral gi'
-  },
-  quickInfo: {
-    fr: 'Détails essentiels',
-    en: 'Key details',
-    wo: 'Liem yi gëna am solo'
-  },
-  origin: {
-    fr: 'Origine',
-    en: 'Origin',
-    wo: 'Orijin'
-  },
-  listen: {
-    fr: 'Écouter la narration',
-    en: 'Listen to the narration',
-    wo: 'Degg waxinu waxtaan'
-  },
-  available: {
-    fr: 'Disponible',
-    en: 'Available',
-    wo: 'Disponib'
-  },
-  notAvailable: {
-    fr: 'Non disponible',
-    en: 'Not available',
-    wo: 'Pa disponib'
-  },
-  previous: {
-    fr: 'Précédent',
-    en: 'Previous',
-    wo: 'Anvan'
-  },
-  next: {
-    fr: 'Suivant',
-    en: 'Next',
-    wo: 'Apre'
-  }
-}
 
 export const Route = createFileRoute('/artifact/$id')({
   component: ArtifactPage,
@@ -86,6 +40,7 @@ export const Route = createFileRoute('/artifact/$id')({
 
 function ArtifactPage() {
   const { id } = Route.useParams()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const [currentLanguage, setCurrentLanguage] = useState('fr')
   const [isImageLoaded, setIsImageLoaded] = useState(false)
@@ -101,12 +56,12 @@ function ArtifactPage() {
     return (
       <div className="min-h-screen bg-[#f4f4f0] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-light text-[#2f2f2f] mb-4">Artifact not found</h1>
+          <h1 className="text-2xl font-light text-[#2f2f2f] mb-4">{t('artifact.artifactNotFound')}</h1>
           <button
             onClick={() => navigate({ to: '/collections' })}
             className="px-6 py-2 bg-[#CD853F] text-white rounded-lg hover:bg-[#b8682a] transition-colors"
           >
-            Return to Collections
+            {t('artifact.returnToCollections')}
           </button>
         </div>
       </div>
@@ -120,6 +75,7 @@ function ArtifactPage() {
 
   const handleLanguageChange = (lang) => {
     setCurrentLanguage(lang)
+    i18n.changeLanguage(lang)
   }
 
   const handleNext = () => {
@@ -258,7 +214,7 @@ function ArtifactPage() {
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            <span>{uiText.back[currentLanguage]}</span>
+            <span>{t('artifact.backToCollections')}</span>
           </button>
 
           <div className="flex w-full flex-wrap items-center justify-between gap-2 md:w-auto md:justify-end">
@@ -323,7 +279,7 @@ function ArtifactPage() {
                 style={{ fontFamily: 'var(--font-accent)' }}
               >
                 <span className="h-1 w-1 rounded-full bg-[#CD853F]" aria-hidden="true" />
-                {uiText.story[currentLanguage]}
+                {t('artifact.theStory')}
               </span>
               <h1
                 className="mt-4 text-3xl font-semibold leading-tight text-[#2f241a] md:text-4xl"
@@ -367,7 +323,7 @@ function ArtifactPage() {
                           className="text-sm font-medium text-[#3a2f24]"
                           style={{ fontFamily: 'var(--font-accent)' }}
                         >
-                          {uiText.listen[currentLanguage]}
+                          {t('artifact.listenToNarration')}
                         </span>
                         <span className="text-xs uppercase tracking-[0.4em] text-[#95806a]">
                           {currentLanguage.toUpperCase()}
@@ -402,7 +358,7 @@ function ArtifactPage() {
                               d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
                             />
                           </svg>
-                          {uiText.available[currentLanguage]}
+                          {t('artifact.available')}
                         </span>
                       </div>
                     </div>
@@ -438,7 +394,7 @@ function ArtifactPage() {
                       className="text-xs uppercase tracking-[0.2em] text-[#8b7359]"
                       style={{ fontFamily: 'var(--font-accent)' }}
                     >
-                      {uiText.origin[currentLanguage]}
+                      {t('artifact.origin')}
                     </span>
                     <p
                       className="text-sm font-medium text-[#2f241a]"

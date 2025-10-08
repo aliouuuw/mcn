@@ -1,53 +1,55 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const VisiteComponent = () => {
+  const { t } = useTranslation()
   const [selectedTab, setSelectedTab] = useState('infos')
 
   const visitInfo = {
     horaires: [
-      { jour: 'Mardi - Dimanche', heures: '10h00 - 18h00' },
-      { jour: 'Lundi', heures: 'Fermé' },
-      { jour: 'Jours fériés', heures: '10h00 - 16h00' }
+      { jour: t('visite.tuesdayToSunday'), heures: '10h00 - 18h00' },
+      { jour: t('visite.monday'), heures: t('visite.closed') },
+      { jour: t('visite.holidays'), heures: '10h00 - 16h00' }
     ],
     tarifs: [
-      { type: 'Adulte', prix: '5 000 FCFA', description: 'Tarif plein' },
-      { type: 'Étudiant', prix: '2 500 FCFA', description: 'Sur présentation de la carte' },
-      { type: 'Enfant (-12 ans)', prix: 'Gratuit', description: 'Accompagné d\'un adulte' },
-      { type: 'Groupe (10+)', prix: '3 500 FCFA', description: 'Par personne' },
-      { type: 'Visite guidée', prix: '+ 2 000 FCFA', description: 'En supplément' }
+      { type: t('visite.adult'), prix: '5 000 FCFA', description: t('visite.fullPrice') },
+      { type: t('visite.student'), prix: '2 500 FCFA', description: t('visite.withCard') },
+      { type: t('visite.child'), prix: 'Gratuit', description: t('visite.withAdult') },
+      { type: t('visite.group'), prix: '3 500 FCFA', description: t('visite.perPerson') },
+      { type: t('visite.guidedTour'), prix: '+ 2 000 FCFA', description: t('visite.supplement') }
     ],
     services: [
       {
         icon: '🎧',
-        titre: 'Audioguides',
-        description: 'Disponibles en français, anglais et wolof'
+        titre: t('visite.audioguides'),
+        description: t('visite.audioguidesDesc')
       },
       {
         icon: '♿',
-        titre: 'Accessibilité',
-        description: 'Musée entièrement accessible aux personnes à mobilité réduite'
+        titre: t('visite.accessibility'),
+        description: t('visite.accessibilityDesc')
       },
       {
         icon: '📸',
-        titre: 'Photographie',
-        description: 'Autorisée sans flash dans les espaces permanents'
+        titre: t('visite.photography'),
+        description: t('visite.photographyDesc')
       },
       {
         icon: '🍽️',
-        titre: 'Restauration',
-        description: 'Café-restaurant avec terrasse panoramique'
+        titre: t('visite.restaurant'),
+        description: t('visite.restaurantDesc')
       },
       {
         icon: '🛍️',
-        titre: 'Boutique',
-        description: 'Librairie et boutique de souvenirs artisanaux'
+        titre: t('visite.shop'),
+        description: t('visite.shopDesc')
       },
       {
         icon: '🅿️',
-        titre: 'Parking',
-        description: 'Parking gratuit pour les visiteurs'
+        titre: t('visite.parking'),
+        description: t('visite.parkingDesc')
       }
     ]
   }
@@ -55,56 +57,56 @@ const VisiteComponent = () => {
   const visitsTypes = [
     {
       id: 1,
-      titre: 'Visite Libre',
-      duree: 'À votre rythme',
-      prix: 'Inclus dans le billet',
-      description: 'Explorez le musée à votre propre rythme avec nos panneaux explicatifs détaillés.',
+      titre: t('visite.freeVisit'),
+      duree: t('visite.atYourPace'),
+      prix: t('visite.includedInTicket'),
+      description: t('visite.freeVisitDesc'),
       points: [
-        'Accès à toutes les collections permanentes',
-        'Plan du musée fourni',
-        'Audioguide disponible en location'
+        t('visite.accessAllCollections'),
+        t('visite.museumMap'),
+        t('visite.audioguideRental')
       ],
       image: '/artefacts/masque-ceremoniel-serere-senegal.png'
     },
     {
       id: 2,
-      titre: 'Visite Guidée Générale',
+      titre: t('visite.generalGuidedTour'),
       duree: '1h30',
       prix: '2 000 FCFA',
-      description: 'Découvrez les points forts du musée avec un guide expert.',
+      description: t('visite.generalGuidedTourDesc'),
       points: [
-        'Présentation des œuvres majeures',
-        'Contexte historique et culturel',
-        'Questions-réponses avec le guide',
-        'Départs à 11h00 et 15h00'
+        t('visite.presentationMajorWorks'),
+        t('visite.historicalContext'),
+        t('visite.qaWithGuide'),
+        t('visite.departures')
       ],
       image: '/artefacts/statue-dogon-de-lesprit-protecteur-mali.png'
     },
     {
       id: 3,
-      titre: 'Visite Thématique',
+      titre: t('visite.thematicVisit'),
       duree: '2h00',
       prix: '3 000 FCFA',
-      description: 'Approfondissez un thème spécifique avec un conservateur.',
+      description: t('visite.thematicVisitDesc'),
       points: [
-        'Royaumes et empires africains',
-        'Art et spiritualité',
-        'Textiles et parures',
-        'Sur réservation uniquement'
+        t('visite.kingdomsEmpires'),
+        t('visite.artSpirituality'),
+        t('visite.textilesJewelry'),
+        t('visite.reservationOnly')
       ],
       image: '/artefacts/bracelet-en-or-de-lempire-ashanti-ghana.png'
     },
     {
       id: 4,
-      titre: 'Visite Scolaire',
+      titre: t('visite.schoolVisit'),
       duree: '1h00',
       prix: 'Gratuit',
-      description: 'Programme éducatif adapté aux groupes scolaires.',
+      description: t('visite.schoolVisitDesc'),
       points: [
-        'Adapté aux différents niveaux',
-        'Activités pédagogiques interactives',
-        'Dossier pédagogique fourni',
-        'Réservation obligatoire'
+        t('visite.adaptedLevels'),
+        t('visite.interactiveActivities'),
+        t('visite.educationalFile'),
+        t('visite.reservationRequired')
       ],
       image: '/artefacts/Reproduction_du_crâne_Homo_Senegalensis_senegal.jpg'
     }
@@ -155,7 +157,7 @@ const VisiteComponent = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Planifiez Votre Visite
+            {t('visite.title')}
           </motion.h1>
           <motion.p
             className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto"
@@ -164,7 +166,7 @@ const VisiteComponent = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Toutes les informations pratiques pour votre visite au musée
+            {t('visite.subtitle')}
           </motion.p>
         </motion.div>
 
@@ -177,9 +179,9 @@ const VisiteComponent = () => {
         >
           <div className="flex flex-wrap justify-center gap-3">
             {[
-              { id: 'infos', label: 'Informations Pratiques' },
-              { id: 'visites', label: 'Types de Visites' },
-              { id: 'acces', label: 'Accès & Contact' }
+              { id: 'infos', label: t('visite.practicalInfo') },
+              { id: 'visites', label: t('visite.visitTypes') },
+              { id: 'acces', label: t('visite.accessContact') }
             ].map((tab, index) => (
               <motion.button
                 key={tab.id}
@@ -215,7 +217,7 @@ const VisiteComponent = () => {
               {/* Horaires */}
               <div className="glass-panel rounded-2xl p-8">
                 <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: 'var(--font-display)' }}>
-                  Horaires d'Ouverture
+                  {t('visite.openingHours')}
                 </h2>
                 <div className="space-y-4">
                   {visitInfo.horaires.map((horaire, index) => (
@@ -230,7 +232,7 @@ const VisiteComponent = () => {
               {/* Tarifs */}
               <div className="glass-panel rounded-2xl p-8">
                 <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: 'var(--font-display)' }}>
-                  Tarifs
+                  {t('visite.prices')}
                 </h2>
                 <div className="space-y-4">
                   {visitInfo.tarifs.map((tarif, index) => (
@@ -248,7 +250,7 @@ const VisiteComponent = () => {
               {/* Services */}
               <div className="glass-panel rounded-2xl p-8">
                 <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: 'var(--font-display)' }}>
-                  Services & Équipements
+                  {t('visite.services')}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {visitInfo.services.map((service, index) => (
@@ -337,7 +339,7 @@ const VisiteComponent = () => {
               {/* Contact */}
               <div className="glass-panel rounded-2xl p-8">
                 <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: 'var(--font-display)' }}>
-                  Contact
+                  {t('visite.contact')}
                 </h2>
                 <div className="space-y-4">
                   <div className="flex items-start">
@@ -346,7 +348,7 @@ const VisiteComponent = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <div>
-                      <p className="font-medium text-gray-800">Adresse</p>
+                      <p className="font-medium text-gray-800">{t('visite.address')}</p>
                       <p className="text-gray-600">{acces.adresse}</p>
                     </div>
                   </div>
@@ -355,7 +357,7 @@ const VisiteComponent = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                     <div>
-                      <p className="font-medium text-gray-800">Téléphone</p>
+                      <p className="font-medium text-gray-800">{t('visite.phone')}</p>
                       <p className="text-gray-600">{acces.telephone}</p>
                     </div>
                   </div>
@@ -364,7 +366,7 @@ const VisiteComponent = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     <div>
-                      <p className="font-medium text-gray-800">Email</p>
+                      <p className="font-medium text-gray-800">{t('visite.email')}</p>
                       <p className="text-gray-600">{acces.email}</p>
                     </div>
                   </div>
@@ -374,7 +376,7 @@ const VisiteComponent = () => {
               {/* Transports */}
               <div className="glass-panel rounded-2xl p-8">
                 <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: 'var(--font-display)' }}>
-                  Comment Venir
+                  {t('visite.howToGetThere')}
                 </h2>
                 <div className="space-y-4">
                   {acces.transports.map((transport, index) => (
@@ -389,10 +391,10 @@ const VisiteComponent = () => {
               {/* Map Placeholder */}
               <div className="glass-panel rounded-2xl p-8">
                 <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: 'var(--font-display)' }}>
-                  Localisation
+                  {t('visite.location')}
                 </h2>
                 <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-500">Carte interactive à venir</p>
+                  <p className="text-gray-500">{t('visite.interactiveMap')}</p>
                 </div>
               </div>
             </motion.div>

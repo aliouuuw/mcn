@@ -1,8 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const AgendaComponent = () => {
+  const { t } = useTranslation()
   const [selectedCategory, setSelectedCategory] = useState('tous')
 
   const events = [
@@ -69,12 +71,12 @@ const AgendaComponent = () => {
   ]
 
   const categories = [
-    { id: 'tous', label: 'Tous les événements' },
-    { id: 'exposition', label: 'Expositions' },
-    { id: 'conference', label: 'Conférences' },
-    { id: 'atelier', label: 'Ateliers' },
-    { id: 'visite', label: 'Visites guidées' },
-    { id: 'spectacle', label: 'Spectacles' }
+    { id: 'tous', label: t('agenda.allEvents') },
+    { id: 'exposition', label: t('agenda.exhibitions') },
+    { id: 'conference', label: t('agenda.conferences') },
+    { id: 'atelier', label: t('agenda.workshops') },
+    { id: 'visite', label: t('agenda.guidedTours') },
+    { id: 'spectacle', label: t('agenda.shows') }
   ]
 
   const filteredEvents = selectedCategory === 'tous' 
@@ -106,7 +108,7 @@ const AgendaComponent = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Agenda Culturel
+            {t('agenda.title')}
           </motion.h1>
           <motion.p
             className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto"
@@ -115,7 +117,7 @@ const AgendaComponent = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Découvrez nos événements, expositions et activités culturelles
+            {t('agenda.subtitle')}
           </motion.p>
         </motion.div>
 
@@ -222,7 +224,7 @@ const AgendaComponent = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  En savoir plus
+                  {t('agenda.learnMore')}
                 </motion.button>
               </div>
             </motion.div>
@@ -238,7 +240,7 @@ const AgendaComponent = () => {
             transition={{ duration: 0.5 }}
           >
             <p className="text-xl text-gray-600" style={{ fontFamily: 'var(--font-body)' }}>
-              Aucun événement dans cette catégorie pour le moment.
+              {t('agenda.noEvents')}
             </p>
           </motion.div>
         )}

@@ -1,6 +1,8 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import LanguageSwitcher from './components/LanguageSwitcher'
 
 // Animation variants
 const containerVariants = {
@@ -112,6 +114,7 @@ const contextVariants = {
 }
 
 function App() {
+  const { t, i18n } = useTranslation()
   const [hoveredIndex, setHoveredIndex] = useState(null)
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 })
   const [isHoveringHero, setIsHoveringHero] = useState(false)
@@ -158,11 +161,12 @@ function App() {
   }, [isHoveringHero])
   
   // Pre-calculate character positions for cleaner code
-  const titleText = "Explorez l'héritage des Civilisations Noires"
+  const titleText = t('hero.title')
   const words = titleText.split(" ")
   let globalCharIndex = 0
   return (
     <div 
+      key={i18n.language} // Force re-render when language changes
       className="hero-root relative min-h-screen overflow-hidden text-black"
       onMouseEnter={() => setIsHoveringHero(true)}
       onMouseLeave={() => setIsHoveringHero(false)}
@@ -199,7 +203,7 @@ function App() {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <motion.nav 
-            className="nav-shell"
+            className="nav-shell nav-shell-hero"
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
@@ -214,7 +218,7 @@ function App() {
                 className="nav-brand"
                 whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
               >
-                Musée des Civilisations Noires
+                {t('nav.museum')}
               </motion.span>
               <motion.span 
                 className="nav-tagline"
@@ -222,7 +226,7 @@ function App() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6, duration: 0.4 }}
               >
-                Civilisations noires · Patrimoine mondial
+                {t('nav.tagline')}
               </motion.span>
             </motion.div>
             
@@ -232,10 +236,14 @@ function App() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
-              {["Collections", "Agenda", "Visite"].map((item, index) => (
+              {[
+                { key: 'collections', label: t('nav.collections') },
+                { key: 'agenda', label: t('nav.agenda') },
+                { key: 'visit', label: t('nav.visit') }
+              ].map((item, index) => (
                 <motion.a 
-                  key={item}
-                  href={`#${item.toLowerCase()}`} 
+                  key={item.key}
+                  href={`#${item.key}`} 
                   className="nav-link"
                   initial={{ y: -10, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -245,40 +253,12 @@ function App() {
                     transition: { duration: 0.2 } 
                   }}
                 >
-                  {item}
+                  {item.label}
                 </motion.a>
               ))}
             </motion.div>
             
-            <motion.div 
-              className="nav-actions"
-              initial={{ x: 20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.7 }}
-            >
-              {[{ lang: "FR", active: true }, { lang: "EN", active: false }].map((item, index) => (
-                <motion.button 
-                  key={item.lang}
-                  type="button" 
-                  className={`nav-pill ${item.active ? 'is-active' : ''}`}
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ 
-                    duration: 0.3, 
-                    delay: 0.8 + index * 0.1,
-                    type: "spring",
-                    stiffness: 200
-                  }}
-                  whileHover={{ 
-                    scale: 1.1,
-                    transition: { duration: 0.2 }
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {item.lang}
-                </motion.button>
-              ))}
-            </motion.div>
+            <LanguageSwitcher />
           </motion.nav>
         </motion.header>
 
@@ -293,7 +273,7 @@ function App() {
               className="hero-kicker"
               variants={kickerVariants}
             >
-              Mémoire · Culture · Identité
+              {t('hero.kicker')}
             </motion.p>
             
             <motion.h1 
@@ -368,9 +348,8 @@ function App() {
             <motion.p 
               className="hero-subtitle"
               variants={textVariants}
-            >
-              Explorez <strong>18 000</strong> œuvres qui retracent l'évolution des civilisations noires à travers le temps et l'espace.
-            </motion.p>
+              dangerouslySetInnerHTML={{ __html: t('hero.subtitle') }}
+            />
             
             <motion.div 
               className="hero-meta"
@@ -383,7 +362,7 @@ function App() {
                 whileHover="hover"
                 whileTap="tap"
               >
-                Découvrir les collections
+                {t('hero.cta')}
               </motion.a>
               
               <motion.div 
@@ -391,10 +370,10 @@ function App() {
                 variants={containerVariants}
               >
                 <motion.span variants={contextVariants}>
-                  18 000 œuvres
+                  {t('hero.works')}
                 </motion.span>
                 <motion.span variants={contextVariants}>
-                  Cultures du monde noir
+                  {t('hero.cultures')}
                 </motion.span>
               </motion.div>
             </motion.div>

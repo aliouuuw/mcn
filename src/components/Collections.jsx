@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 import WebGLGallery from './WebGLGallery.js'
 
 // Import real artifacts data
@@ -12,6 +13,7 @@ const infiniteArtifacts = artifacts
 
 
 const Collections = () => {
+  const { t } = useTranslation()
   const galleryRef = useRef()
   const webglGalleryRef = useRef()
   const [isLoading, setIsLoading] = useState(true)
@@ -121,58 +123,58 @@ const Collections = () => {
       {/* Loading screen */}
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#f4f4f0] loading-screen">
-          <div className="text-center">
-            <div className="text-[#2f2f2f] text-xl font-light tracking-wider mb-4">Loading Gallery...</div>
-            <div className="loading-dots">
-              <span className="dot"></span>
-              <span className="dot"></span>
-              <span className="dot"></span>
-            </div>
+        <div className="text-center">
+          <div className="text-[#2f2f2f] text-xl font-light tracking-wider mb-4">{t('common.loading')}</div>
+          <div className="loading-dots">
+            <span className="dot"></span>
+            <span className="dot"></span>
+            <span className="dot"></span>
           </div>
+        </div>
         </div>
       )}
 
       {/* Error screen */}
       {hasError && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#fef2f2]">
-          <div className="text-center max-w-md mx-auto p-8">
-            <div className="text-[#dc2626] text-2xl font-light tracking-wider mb-4">Gallery Unavailable</div>
-            <p className="text-[#7f1d1d] text-sm mb-6">
-              We're unable to load the WebGL gallery. This might be due to your browser not supporting WebGL or a graphics hardware issue.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button 
-                onClick={() => {
-                  setHasError(false)
-                  setIsLoading(true)
-                  // Force re-initialization
-                  if (webglGalleryRef.current) {
-                    webglGalleryRef.current.destroy()
-                    webglGalleryRef.current = null
-                  }
-                }}
-                className="px-6 py-2 bg-[#dc2626] text-white rounded-lg hover:bg-[#b91c1c] transition-colors"
-              >
-                Try Again
-              </button>
-              <button 
-                onClick={() => window.location.reload()}
-                className="px-6 py-2 bg-[#f3f4f6] text-[#374151] rounded-lg hover:bg-[#e5e7eb] transition-colors"
-              >
-                Reload Page
-              </button>
-            </div>
+        <div className="text-center max-w-md mx-auto p-8">
+          <div className="text-[#dc2626] text-2xl font-light tracking-wider mb-4">{t('common.galleryUnavailable')}</div>
+          <p className="text-[#7f1d1d] text-sm mb-6">
+            {t('common.webglError')}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button 
+              onClick={() => {
+                setHasError(false)
+                setIsLoading(true)
+                // Force re-initialization
+                if (webglGalleryRef.current) {
+                  webglGalleryRef.current.destroy()
+                  webglGalleryRef.current = null
+                }
+              }}
+              className="px-6 py-2 bg-[#dc2626] text-white rounded-lg hover:bg-[#b91c1c] transition-colors"
+            >
+              {t('common.tryAgain')}
+            </button>
+            <button 
+              onClick={() => window.location.reload()}
+              className="px-6 py-2 bg-[#f3f4f6] text-[#374151] rounded-lg hover:bg-[#e5e7eb] transition-colors"
+            >
+              {t('common.reloadPage')}
+            </button>
           </div>
+        </div>
         </div>
       )}
 
       {/* Header */}
       <div className={`fixed top-0 left-0 right-0 z-20 p-8 pointer-events-none header ${!isLoading ? 'header-visible' : ''}`}>
         <h1 className="text-[#1a1a1a] text-4xl font-light tracking-wider text-center">
-          Musée des Civilisations Noires
+          {t('collections.museumName')}
         </h1>
         <p className="text-[#2f2f2f]/70 text-center mt-2">
-          Infinite Gallery Experience
+          {t('collections.galleryExperience')}
         </p>
       </div>
 
@@ -311,7 +313,7 @@ const Collections = () => {
       {/* Overlay d'instructions */}
       <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-20 pointer-events-none">
         <div className="text-[#2f2f2f]/50 text-sm text-center">
-          <p>Cliquez sur un artefact pour en savoir plus • Défilez pour explorer</p>
+          <p>{t('collections.instructions')}</p>
         </div>
       </div>
 
