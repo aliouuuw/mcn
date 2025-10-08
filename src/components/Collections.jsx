@@ -248,18 +248,20 @@ const Collections = () => {
             gridRowSpan = `span ${rowSpan}`
           }
 
-          // Calculate responsive dimensions with more consistent heights
-          let itemHeight
+          // Calculate responsive dimensions - use auto height to let images determine their own size
+          let itemHeight = 'auto'
+          let maxHeight
+          
           if (isMobile) {
-            itemHeight = `${22 + (index % 3) * 6}rem` // Mobile: 22rem, 28rem, 34rem
+            maxHeight = `${30 + (index % 3) * 8}rem` // Mobile: flexible max heights
           } else if (isTablet) {
-            itemHeight = `${28 + (index % 4) * 5}rem` // Tablet: 28rem, 33rem, 38rem, 43rem
+            maxHeight = `${35 + (index % 4) * 6}rem` // Tablet: flexible max heights
           } else {
-            // Desktop: Height based on row span with more variation
-            const baseHeights = {1: 28, 2: 38, 3: 48}
+            // Desktop: Max height based on row span but allow flexibility
+            const baseMaxHeights = {1: 40, 2: 50, 3: 60}
             const spanNum = parseInt(gridRowSpan.split(' ')[1]) || 1
-            const variation = (index % 5) * 3 // More subtle variation
-            itemHeight = `${baseHeights[spanNum] + variation}rem`
+            const variation = (index % 5) * 4
+            maxHeight = `${baseMaxHeights[spanNum] + variation}rem`
           }
 
           // Add random positioning within grid cells for organic feel
@@ -274,26 +276,30 @@ const Collections = () => {
               className="gallery-item"
               style={{
                 height: itemHeight,
-                borderRadius: `${10 + (index % 3) * 2}px`, // More subtle border radius variation
+                maxHeight: maxHeight,
+                borderRadius: `${10 + (index % 3) * 2}px`,
                 overflow: 'hidden',
                 transition: 'all 0.4s ease-out',
                 gridColumn: gridColumnSpan,
                 gridRow: gridRowSpan,
                 justifySelf: justifySelf,
                 alignSelf: alignSelf,
-                // Add margin for extra spacing between items
                 margin: `${(index % 2) * 0.5}rem`,
-                // Ensure minimum spacing
-                minWidth: isMobile ? '120px' : isTablet ? '150px' : '180px'
+                minWidth: isMobile ? '120px' : isTablet ? '150px' : '180px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
               <img
                 src={artifact.type === 'video' ? artifact.thumbnail : artifact.src}
                 alt={artifact.titles?.en || 'Artifact'}
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                  width: 'auto',
+                  height: 'auto',
+                  objectFit: 'contain',
                   borderRadius: 'inherit'
                 }}
               />
