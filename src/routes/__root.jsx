@@ -74,26 +74,28 @@ const RootComponent = () => {
                 Collections
               </motion.span>
             </Link>
-            <motion.a 
-              href="#agenda" 
-              className="nav-link"
-              whileHover={{ 
-                y: -2, 
-                transition: { duration: 0.2 } 
-              }}
-            >
-              Agenda
-            </motion.a>
-            <motion.a 
-              href="#visite" 
-              className="nav-link"
-              whileHover={{ 
-                y: -2, 
-                transition: { duration: 0.2 } 
-              }}
-            >
-              Visite
-            </motion.a>
+            <Link to="/agenda">
+              <motion.span 
+                className="nav-link"
+                whileHover={{ 
+                  y: -2, 
+                  transition: { duration: 0.2 } 
+                }}
+              >
+                Agenda
+              </motion.span>
+            </Link>
+            <Link to="/visite">
+              <motion.span 
+                className="nav-link"
+                whileHover={{ 
+                  y: -2, 
+                  transition: { duration: 0.2 } 
+                }}
+              >
+                Visite
+              </motion.span>
+            </Link>
           </motion.div>
           
           <motion.div 
@@ -185,28 +187,28 @@ const RootComponent = () => {
                       Collections
                     </motion.span>
                   </Link>
-                  <motion.a 
-                    href="#agenda" 
-                    className="mobile-nav-link"
-                    onClick={closeMobileMenu}
-                    whileHover={{ 
-                      x: 4,
-                      transition: { duration: 0.2 } 
-                    }}
-                  >
-                    Agenda
-                  </motion.a>
-                  <motion.a 
-                    href="#visite" 
-                    className="mobile-nav-link"
-                    onClick={closeMobileMenu}
-                    whileHover={{ 
-                      x: 4,
-                      transition: { duration: 0.2 } 
-                    }}
-                  >
-                    Visite
-                  </motion.a>
+                  <Link to="/agenda" onClick={closeMobileMenu}>
+                    <motion.span 
+                      className="mobile-nav-link"
+                      whileHover={{ 
+                        x: 4,
+                        transition: { duration: 0.2 } 
+                      }}
+                    >
+                      Agenda
+                    </motion.span>
+                  </Link>
+                  <Link to="/visite" onClick={closeMobileMenu}>
+                    <motion.span 
+                      className="mobile-nav-link"
+                      whileHover={{ 
+                        x: 4,
+                        transition: { duration: 0.2 } 
+                      }}
+                    >
+                      Visite
+                    </motion.span>
+                  </Link>
                 </div>
                 
                 <div className="mobile-nav-actions">

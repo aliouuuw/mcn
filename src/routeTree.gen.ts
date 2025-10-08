@@ -9,13 +9,25 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VisiteRouteImport } from './routes/visite'
 import { Route as CollectionsRouteImport } from './routes/collections'
+import { Route as AgendaRouteImport } from './routes/agenda'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ArtifactIdRouteImport } from './routes/artifact.$id'
 
+const VisiteRoute = VisiteRouteImport.update({
+  id: '/visite',
+  path: '/visite',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CollectionsRoute = CollectionsRouteImport.update({
   id: '/collections',
   path: '/collections',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgendaRoute = AgendaRouteImport.update({
+  id: '/agenda',
+  path: '/agenda',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -31,41 +43,69 @@ const ArtifactIdRoute = ArtifactIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agenda': typeof AgendaRoute
   '/collections': typeof CollectionsRoute
+  '/visite': typeof VisiteRoute
   '/artifact/$id': typeof ArtifactIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agenda': typeof AgendaRoute
   '/collections': typeof CollectionsRoute
+  '/visite': typeof VisiteRoute
   '/artifact/$id': typeof ArtifactIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agenda': typeof AgendaRoute
   '/collections': typeof CollectionsRoute
+  '/visite': typeof VisiteRoute
   '/artifact/$id': typeof ArtifactIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/collections' | '/artifact/$id'
+  fullPaths: '/' | '/agenda' | '/collections' | '/visite' | '/artifact/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/collections' | '/artifact/$id'
-  id: '__root__' | '/' | '/collections' | '/artifact/$id'
+  to: '/' | '/agenda' | '/collections' | '/visite' | '/artifact/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/agenda'
+    | '/collections'
+    | '/visite'
+    | '/artifact/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgendaRoute: typeof AgendaRoute
   CollectionsRoute: typeof CollectionsRoute
+  VisiteRoute: typeof VisiteRoute
   ArtifactIdRoute: typeof ArtifactIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/visite': {
+      id: '/visite'
+      path: '/visite'
+      fullPath: '/visite'
+      preLoaderRoute: typeof VisiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/collections': {
       id: '/collections'
       path: '/collections'
       fullPath: '/collections'
       preLoaderRoute: typeof CollectionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agenda': {
+      id: '/agenda'
+      path: '/agenda'
+      fullPath: '/agenda'
+      preLoaderRoute: typeof AgendaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -87,7 +127,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgendaRoute: AgendaRoute,
   CollectionsRoute: CollectionsRoute,
+  VisiteRoute: VisiteRoute,
   ArtifactIdRoute: ArtifactIdRoute,
 }
 export const routeTree = rootRouteImport
