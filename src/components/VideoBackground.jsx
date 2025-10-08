@@ -47,7 +47,6 @@ const VideoBackground = () => {
         loop
         muted
         playsInline
-        poster="/mcn-2.png"
         aria-hidden="true"
         role="presentation"
       >
