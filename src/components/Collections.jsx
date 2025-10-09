@@ -170,10 +170,10 @@ const Collections = () => {
 
       {/* Header */}
       <div className={`fixed top-0 left-0 right-0 z-20 p-8 pointer-events-none header ${!isLoading ? 'header-visible' : ''}`}>
-        <h1 className="text-[#1a1a1a] text-4xl font-light tracking-wider text-center">
+        <h1 className="text-[#1a1a1a] text-4xl font-light tracking-wider text-center pointer-events-auto">
           {t('collections.museumName')}
         </h1>
-        <p className="text-[#2f2f2f]/70 text-center mt-2">
+        <p className="text-[#2f2f2f]/70 text-center mt-2 pointer-events-auto">
           {t('collections.galleryExperience')}
         </p>
       </div>

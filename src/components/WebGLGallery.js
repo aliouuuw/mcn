@@ -130,9 +130,14 @@ export default class WebGLGallery {
   onTouchUp(event) {
     // If we weren't dragging, treat this as a potential click
     if (this.isDown && !this.isDragging) {
-      this.onClick(event)
+      // Check if touch end is within navbar area before processing click
+      const touch = event.changedTouches ? event.changedTouches[0] : event.touches[0]
+      const navbarHeight = window.innerWidth < 768 ? 200 : 220
+      if (touch.clientY > navbarHeight) {
+        this.onClick(event)
+      }
     }
-    
+
     this.isDown = false
     this.isDragging = false
   }
@@ -307,6 +312,14 @@ export default class WebGLGallery {
       // Mouse event
       clientX = event.clientX
       clientY = event.clientY
+    }
+
+    // Check if click is within navbar area (top portion of screen)
+    // Navbar is typically around 120-200px from top on mobile, more on desktop
+    const navbarHeight = window.innerWidth < 768 ? 200 : 220
+    if (clientY <= navbarHeight) {
+      // Don't process clicks in navbar area - let them bubble up to navbar elements
+      return
     }
 
     const x = clientX - rect.left
