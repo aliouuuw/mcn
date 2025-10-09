@@ -294,10 +294,23 @@ export default class WebGLGallery {
     event.preventDefault()
     event.stopPropagation()
 
-    // Get click coordinates
+    // Get click coordinates - handle both mouse and touch events
     const rect = this.gl.canvas.getBoundingClientRect()
-    const x = event.clientX - rect.left
-    const y = event.clientY - rect.top
+    let clientX, clientY
+
+    if (event.touches || event.changedTouches) {
+      // Touch event
+      const touch = event.changedTouches ? event.changedTouches[0] : event.touches[0]
+      clientX = touch.clientX
+      clientY = touch.clientY
+    } else {
+      // Mouse event
+      clientX = event.clientX
+      clientY = event.clientY
+    }
+
+    const x = clientX - rect.left
+    const y = clientY - rect.top
 
     // Convert to normalized coordinates
     const normalizedX = x / rect.width
@@ -305,7 +318,7 @@ export default class WebGLGallery {
 
     // Find which media element was clicked
     const clickedMedia = this.getMediaAtPosition(normalizedX, normalizedY)
-    
+
     if (clickedMedia) {
       this.showArtifactDetails(clickedMedia)
     }
@@ -382,6 +395,11 @@ export default class WebGLGallery {
     this.gl.canvas.addEventListener('mouseenter', this.onMouseEnter)
     this.gl.canvas.addEventListener('mouseleave', this.onMouseLeave)
     this.gl.canvas.addEventListener('click', this.onClick)
+
+    // Add touch event listeners for mobile click detection
+    this.gl.canvas.addEventListener('touchstart', this.onTouchDown.bind(this))
+    this.gl.canvas.addEventListener('touchmove', this.onTouchMove.bind(this))
+    this.gl.canvas.addEventListener('touchend', this.onTouchUp.bind(this))
   }
 
   destroy() {
@@ -414,6 +432,11 @@ export default class WebGLGallery {
         this.canvas.removeEventListener('mouseenter', this.onMouseEnter)
         this.canvas.removeEventListener('mouseleave', this.onMouseLeave)
         this.canvas.removeEventListener('click', this.onClick)
+
+        // Clean up touch event listeners
+        this.canvas.removeEventListener('touchstart', this.onTouchDown)
+        this.canvas.removeEventListener('touchmove', this.onTouchMove)
+        this.canvas.removeEventListener('touchend', this.onTouchUp)
       }
     }
 
