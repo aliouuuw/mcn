@@ -985,8 +985,29 @@ body {
     grid-template-columns: 1fr auto;
     gap: 1rem;
     padding: 1rem;
+  }
+
+  /* Mobile hero navbar (dark, for home page) */
+  .nav-shell-hero {
     background: rgba(0, 0, 0, 0.5);
     border-color: rgba(0, 0, 0, 0.4);
+  }
+
+  /* Mobile default navbar (light, for other pages) */
+  .nav-shell-default {
+    background: rgba(251, 249, 247, 0.9);
+    border-color: rgba(139, 69, 19, 0.2);
+  }
+
+  /* Mobile navbar text colors (dark for light background) */
+  .nav-shell-default .nav-brand {
+    color: #1a1a1a;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-shell-default .nav-tagline {
+    color: var(--color-earth);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 
   .nav-links {
@@ -1059,7 +1080,7 @@ body {
     background: #ffffff;
   }
 
-  /* Default page hamburger lines (earth color) */
+  /* Default page hamburger lines (earth color for light background) */
   .nav-shell-default .hamburger-line {
     background: var(--color-earth);
   }
@@ -1090,11 +1111,18 @@ body {
     z-index: 40;
   }
 
-  /* All mobile menus should have dark background for white text */
-  .mobile-menu {
+  /* Hero page mobile menu (dark background) */
+  .nav-shell-hero .mobile-menu {
     background: rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Default page mobile menu (light background) */
+  .nav-shell-default .mobile-menu {
+    background: rgba(251, 249, 247, 0.95);
+    border: 1px solid rgba(139, 69, 19, 0.2);
+    box-shadow: 0 8px 32px rgba(139, 69, 19, 0.15);
   }
 
   .mobile-menu-content {
@@ -1121,17 +1149,62 @@ body {
     transition: all 0.3s ease;
   }
 
-  /* All mobile nav links should be white */
-  .mobile-nav-link {
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  /* Hero page mobile nav links (white for dark background) - Force white on all elements */
+  .nav-shell-hero .mobile-nav-links a,
+  .nav-shell-hero .mobile-nav-links a *,
+  .nav-shell-hero .mobile-nav-links a span,
+  .nav-shell-hero .mobile-nav-links a .mobile-nav-link {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
   }
 
-  .mobile-nav-link:hover {
+  /* Additional rule to ensure Link component text is white */
+  .nav-shell-hero .mobile-nav-links > a {
+    color: #ffffff !important;
+  }
+
+  .nav-shell-hero .mobile-nav-links > a > * {
+    color: #ffffff !important;
+  }
+
+  /* Specific rule for motion.span elements inside mobile nav links */
+  .nav-shell-hero .mobile-nav-links span.mobile-nav-link {
+    color: #ffffff !important;
+  }
+
+  /* Maximum specificity rule - should override everything */
+  .nav-shell.nav-shell-hero .mobile-menu .mobile-nav-links a span.mobile-nav-link {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+  }
+
+  /* Nuclear option - force all text in hero mobile nav links to be white */
+  .nav-shell-hero .mobile-nav-links * {
+    color: #ffffff !important;
+  }
+
+  /* Hero page mobile nav links hover states */
+  .nav-shell-hero .mobile-nav-links a:hover,
+  .nav-shell-hero .mobile-nav-links a:hover *,
+  .nav-shell-hero .mobile-nav-links a:hover span,
+  .nav-shell-hero .mobile-nav-links a:hover .mobile-nav-link {
     background: rgba(255, 255, 255, 0.1);
-    color: var(--color-accent-gold);
+    color: var(--color-accent-gold) !important;
     transform: translateX(0.25rem);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(218, 165, 32, 0.5);
+  }
+
+  /* Default page mobile nav links (dark text for light background) */
+  .nav-shell-default .mobile-nav-link {
+    color: #2f2f2f !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-shell-default .mobile-nav-link:hover {
+    background: rgba(139, 69, 19, 0.1);
+    color: var(--color-earth) !important;
+    transform: translateX(0.25rem);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 
   .mobile-nav-actions {
@@ -1153,70 +1226,30 @@ body {
     transition: all 0.3s ease;
   }
 
-  /* Hero page mobile nav pills (gradient style) */
-  .nav-shell-hero .mobile-nav-pill {
-    background: linear-gradient(135deg, var(--color-earth), var(--color-terracotta));
-    color: var(--color-warm-white);
-    text-shadow: none;
-    box-shadow:
-      0 4px 12px rgba(139, 69, 19, 0.3),
-      0 2px 6px rgba(139, 69, 19, 0.2);
-  }
-
-  .nav-shell-hero .mobile-nav-pill:hover,
-  .nav-shell-hero .mobile-nav-pill.is-active {
-    transform: translateY(-1px);
-    box-shadow:
-      0 6px 16px rgba(139, 69, 19, 0.4),
-      0 3px 8px rgba(139, 69, 19, 0.3);
-  }
-
-  /* Default page mobile nav pills (plain orange style) */
-  .nav-shell-default .mobile-nav-pill {
+  /* Mobile nav pills - consistent orange style like desktop */
+  .mobile-nav-pill {
     background: #CD853F;
     color: white;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
-  .nav-shell-default .mobile-nav-pill:hover,
-  .nav-shell-default .mobile-nav-pill.is-active {
+  .mobile-nav-pill:hover,
+  .mobile-nav-pill.is-active {
     background: #b8682a;
     transform: translateY(-1px);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   }
 
-  /* Mobile menu nav-pill styles (for language switcher) - Higher specificity */
-  /* Hero page mobile menu nav-pills (gradient style) */
-  .nav-shell-hero .mobile-menu .nav-pill {
-    background: linear-gradient(135deg, var(--color-earth), var(--color-terracotta)) !important;
-    color: var(--color-warm-white) !important;
-    border: none !important;
-    text-shadow: none !important;
-    box-shadow:
-      0 4px 12px rgba(139, 69, 19, 0.3),
-      0 2px 6px rgba(139, 69, 19, 0.2) !important;
-  }
-
-  .nav-shell-hero .mobile-menu .nav-pill:hover,
-  .nav-shell-hero .mobile-menu .nav-pill.is-active {
-    background: linear-gradient(135deg, var(--color-earth), var(--color-terracotta)) !important;
-    color: var(--color-warm-white) !important;
-    transform: translateY(-1px);
-    box-shadow:
-      0 6px 16px rgba(139, 69, 19, 0.4),
-      0 3px 8px rgba(139, 69, 19, 0.3) !important;
-  }
-
-  /* Default page mobile menu nav-pills (plain orange style) */
-  .nav-shell-default .mobile-menu .nav-pill {
+  /* Mobile menu nav-pill styles - consistent orange like desktop */
+  .mobile-menu .nav-pill {
     background: #CD853F !important;
     color: white !important;
     border: none !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
   }
 
-  .nav-shell-default .mobile-menu .nav-pill:hover,
-  .nav-shell-default .mobile-menu .nav-pill.is-active {
+  .mobile-menu .nav-pill:hover,
+  .mobile-menu .nav-pill.is-active {
     background: #b8682a !important;
     color: white !important;
     transform: translateY(-1px);
@@ -2261,4 +2294,156 @@ body.modal-open {
     color: #000;
     font-weight: 700;
   }
+}
+
+/* FINAL ATTEMPT: Force white text for hero page mobile nav links */
+/* Using the most aggressive approach possible */
+
+/* Override ALL text color properties for hero mobile nav */
+.nav-shell-hero .mobile-menu .mobile-nav-links span.mobile-nav-link {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -moz-text-fill-color: #ffffff !important;
+  text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Override ALL possible text color properties with maximum specificity */
+html body div header nav.nav-shell-hero .mobile-menu .mobile-menu-content .mobile-nav-links span.mobile-nav-link {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -moz-text-fill-color: #ffffff !important;
+  text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Override any inline styles that might be setting color */
+.nav-shell-hero .mobile-menu .mobile-nav-links span.mobile-nav-link[style] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -moz-text-fill-color: #ffffff !important;
+  text-fill-color: #ffffff !important;
+}
+
+/* Force white text on ALL elements in hero mobile nav */
+.nav-shell-hero .mobile-menu .mobile-nav-links * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -moz-text-fill-color: #ffffff !important;
+  text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Maximum specificity override for ALL text elements */
+html body div header nav.nav-shell-hero .mobile-menu .mobile-menu-content .mobile-nav-links * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -moz-text-fill-color: #ffffff !important;
+  text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Override ALL Tailwind text color classes */
+.nav-shell-hero .mobile-menu .mobile-nav-links .text-black,
+.nav-shell-hero .mobile-menu .mobile-nav-links .text-gray-900,
+.nav-shell-hero .mobile-menu .mobile-nav-links .text-gray-800,
+.nav-shell-hero .mobile-menu .mobile-nav-links .text-gray-700,
+.nav-shell-hero .mobile-menu .mobile-nav-links .text-gray-600,
+.nav-shell-hero .mobile-menu .mobile-nav-links .text-gray-500,
+.nav-shell-hero .mobile-menu .mobile-nav-links .text-gray-400,
+.nav-shell-hero .mobile-menu .mobile-nav-links .text-gray-300,
+.nav-shell-hero .mobile-menu .mobile-nav-links .text-gray-200,
+.nav-shell-hero .mobile-menu .mobile-nav-links .text-gray-100 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -moz-text-fill-color: #ffffff !important;
+  text-fill-color: #ffffff !important;
+}
+
+/* Force white text on ALL elements with any text color class */
+.nav-shell-hero .mobile-menu .mobile-nav-links [class*="text-"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -moz-text-fill-color: #ffffff !important;
+  text-fill-color: #ffffff !important;
+}
+
+/* Hover states - gold accent */
+.nav-shell-hero .mobile-menu .mobile-nav-links span.mobile-nav-link:hover {
+  color: var(--color-accent-gold) !important;
+  -webkit-text-fill-color: var(--color-accent-gold) !important;
+  -moz-text-fill-color: var(--color-accent-gold) !important;
+  text-fill-color: var(--color-accent-gold) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateX(0.25rem);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(218, 165, 32, 0.5) !important;
+}
+
+/* Override hover state text color */
+.nav-shell-hero .mobile-menu .mobile-nav-links a:hover span.mobile-nav-link {
+  color: var(--color-accent-gold) !important;
+  -webkit-text-fill-color: var(--color-accent-gold) !important;
+  -moz-text-fill-color: var(--color-accent-gold) !important;
+  text-fill-color: var(--color-accent-gold) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateX(0.25rem);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(218, 165, 32, 0.5) !important;
+}
+
+/* Override any Link component default styles */
+.nav-shell-hero .mobile-menu .mobile-nav-links a {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -moz-text-fill-color: #ffffff !important;
+  text-fill-color: #ffffff !important;
+}
+
+/* Override any Link component hover styles */
+.nav-shell-hero .mobile-menu .mobile-nav-links a:hover {
+  color: var(--color-accent-gold) !important;
+  -webkit-text-fill-color: var(--color-accent-gold) !important;
+  -moz-text-fill-color: var(--color-accent-gold) !important;
+  text-fill-color: var(--color-accent-gold) !important;
+}
+
+/* Force white text on ALL elements in hero mobile nav with absolute positioning */
+.nav-shell-hero .mobile-menu .mobile-nav-links span,
+.nav-shell-hero .mobile-menu .mobile-nav-links div,
+.nav-shell-hero .mobile-menu .mobile-nav-links a,
+.nav-shell-hero .mobile-menu .mobile-nav-links p,
+.nav-shell-hero .mobile-menu .mobile-nav-links h1,
+.nav-shell-hero .mobile-menu .mobile-nav-links h2,
+.nav-shell-hero .mobile-menu .mobile-nav-links h3,
+.nav-shell-hero .mobile-menu .mobile-nav-links h4,
+.nav-shell-hero .mobile-menu .mobile-nav-links h5,
+.nav-shell-hero .mobile-menu .mobile-nav-links h6,
+.nav-shell-hero .mobile-menu .mobile-nav-links span,
+.nav-shell-hero .mobile-menu .mobile-nav-links strong,
+.nav-shell-hero .mobile-menu .mobile-nav-links em,
+.nav-shell-hero .mobile-menu .mobile-nav-links i,
+.nav-shell-hero .mobile-menu .mobile-nav-links b,
+.nav-shell-hero .mobile-menu .mobile-nav-links small,
+.nav-shell-hero .mobile-menu .mobile-nav-links sub,
+.nav-shell-hero .mobile-menu .mobile-nav-links sup,
+.nav-shell-hero .mobile-menu .mobile-nav-links code,
+.nav-shell-hero .mobile-menu .mobile-nav-links kbd,
+.nav-shell-hero .mobile-menu .mobile-nav-links samp,
+.nav-shell-hero .mobile-menu .mobile-nav-links var,
+.nav-shell-hero .mobile-menu .mobile-nav-links cite,
+.nav-shell-hero .mobile-menu .mobile-nav-links abbr,
+.nav-shell-hero .mobile-menu .mobile-nav-links dfn,
+.nav-shell-hero .mobile-menu .mobile-nav-links q,
+.nav-shell-hero .mobile-menu .mobile-nav-links blockquote,
+.nav-shell-hero .mobile-menu .mobile-nav-links time,
+.nav-shell-hero .mobile-menu .mobile-nav-links br,
+.nav-shell-hero .mobile-menu .mobile-nav-links wbr {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  -moz-text-fill-color: #ffffff !important;
+  text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
 }

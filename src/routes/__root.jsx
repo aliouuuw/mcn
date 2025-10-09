@@ -155,12 +155,12 @@ const RootComponent = () => {
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -20, opacity: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
+                transition={{ duration: 0.3, delay: 0.05 }}
               >
                 <div className="mobile-nav-links">
                   <Link to="/collections" onClick={closeMobileMenu}>
                     <motion.span
-                      className="mobile-nav-link"
+                      className={`mobile-nav-link ${isHomePage ? 'text-white' : ''}`}
                       whileHover={{
                         x: 4,
                         transition: { duration: 0.2 }
@@ -171,7 +171,7 @@ const RootComponent = () => {
                   </Link>
                   <Link to="/agenda" onClick={closeMobileMenu}>
                     <motion.span
-                      className="mobile-nav-link"
+                      className={`mobile-nav-link ${isHomePage ? 'text-white' : ''}`}
                       whileHover={{
                         x: 4,
                         transition: { duration: 0.2 }
@@ -182,7 +182,7 @@ const RootComponent = () => {
                   </Link>
                   <Link to="/visite" onClick={closeMobileMenu}>
                     <motion.span
-                      className="mobile-nav-link"
+                      className={`mobile-nav-link ${isHomePage ? 'text-white' : ''}`}
                       whileHover={{
                         x: 4,
                         transition: { duration: 0.2 }
